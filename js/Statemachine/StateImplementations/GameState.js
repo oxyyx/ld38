@@ -1,5 +1,7 @@
 // MenuState constructor
 function GameState(){
+  this.pause = null;
+
   this.activate = function activate(){
     console.log("GameState.activate");
   };

@@ -17,27 +17,31 @@
         };
       }
 
+      // Create states
       var menuState = new MenuState();
       states.push(menuState);
-      var gamestate = new State();
+      var gameState = new GameState();
       states.push(gameState);
 
+      // Define state transitions
       var stateTransitions = [
-        {"initialState": menuState},
-        {"startGame": gameState},
-        {"pause": menuState}
+        {targetState: menuState},
+        {sourceState: menuState, event: 'startGame', targetState: gameState},
+        {sourceState: gameState, event: 'pause', targetState: menuState}
       ];
 
-      for(i = 0; i < states.length; ++i){
-        var state = states[i];
-        state.activate();
-        state.deactivate();
-        state.update();
-
-        for(transitionIndex = 1; transitionIndex < stateTransitions.length; ++i){   // transitionIndex starts at 1, because index 0 contains (or SHOULD contain) the INITIAL STATE (not an actual transition between states, but the transition from 'no state' to 'first state').
-          state./*stateTransitions[transitionIndex].key*/ = getStateTransition(state, stateTransitions[transitionIndex]./*value*/);
+      var initialState = null;
+      for(i = 0; i < stateTransitions.length; ++i){
+        var transition = stateTransitions[i];
+        if(transition.hasOwnProperty('event') && transition.hasOwnProperty('sourceState')){
+          transition.sourceState[transition.event] = getStateTransition(transition.sourceState, transition.targetState);
+        }
+        else{
+          initialState = transition.targetState;
         }
       }
+
+      initialState.activate();
     };
 
     StatemachineController.updateActiveState = function(){
