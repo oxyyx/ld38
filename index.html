@@ -13,16 +13,39 @@
         <div id="canvas-container"></div>
     </div>
 
-		<script src="js/Statemachine/State.js"></script>
-		<script src="js/Statemachine/OverlayState.js"></script>
-		<script src="js/Statemachine/StateImplementations/MenuState.js"></script>
-		<script src="js/Statemachine/StateImplementations/GameState.js"></script>
-		<script src="js/Statemachine/StatemachineController.js"></script>
+	<script src="js/Statemachine/State.js"></script>
+	<script src="js/Statemachine/OverlayState.js"></script>
+	<script src="js/Statemachine/StateImplementations/MenuPopupStackedOverlay.js"></script>
+	<script src="js/Statemachine/StateImplementations/MenuPopup.js"></script>
+	<script src="js/Statemachine/StateImplementations/MenuState.js"></script>
+	<script src="js/Statemachine/StateImplementations/GameState.js"></script>
+	<script src="js/Statemachine/StatemachineInitializer.js"></script>
 	<script src="lib/pixi.js"></script>
 	<script src="js/app.js"></script>
 	<script>
 		PJB.initialize();
-		PJB.statemachineController.initialize();
+
+		// Create states
+		var states = [];
+		var menuState = new MenuState();
+		states.push(menuState);
+		var gameState = new GameState();
+		states.push(gameState);
+		var menuPopup = new MenuPopup();
+		states.push(menuPopup);
+		var menuPopupStackedOverlay = new MenuPopupStackedOverlay();
+		states.push(menuPopupStackedOverlay);
+
+		// Define state transitions
+		var stateTransitions = [
+			{targetState: menuState},
+			{sourceState: menuState, event: 'startGame', targetState: gameState},
+			{sourceState: menuState, event: 'showPopup', targetState: menuPopup},
+			{sourceState: menuPopup, event: 'showStackedOverlay', targetState: menuPopupStackedOverlay},
+			{sourceState: gameState, event: 'pause', targetState: menuState}
+		];
+
+		PJB.statemachineInitializer.initialize(states, stateTransitions);
 	</script>
 </body>
 </html>

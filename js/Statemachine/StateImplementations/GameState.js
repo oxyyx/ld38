@@ -1,18 +1,20 @@
 // MenuState constructor
 function GameState(){
-  this.pause = null;
-
-  this.activate = function activate(){
-    console.log("GameState.activate");
-  };
-
-  this.deactivate = function deactivate(){
-    console.log("GameState.deactivate");
-  };
-
-  this.update = function update(){
-    console.log("GameState.update");
-  };
+  State.call(this);
 };
 
-MenuState.prototype = new State();
+GameState.prototype = Object.create(State.prototype);
+
+GameState.prototype.pause = null;
+
+GameState.prototype.activate = function activate(){
+  console.log("GameState.activate");
+};
+
+GameState.prototype.deactivate = function deactivate(){
+  console.log("GameState.deactivate");
+};
+
+GameState.prototype.update = function update(){
+  console.log("GameState.update");
+};

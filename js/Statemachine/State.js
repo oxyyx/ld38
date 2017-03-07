@@ -1,6 +1,5 @@
 // State constructor.
 function State(){
-
 };
 
 State.prototype.activate = function activate(){

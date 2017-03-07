@@ -1,20 +1,21 @@
 // MenuState constructor
 function MenuState(){
-  this.startGame = null;
-
-  this.activate = function activate(){
-    console.log("MenuState.activate");
-
-    this.startGame();
-  };
-
-  this.deactivate = function deactivate(){
-    console.log("MenuState.deactivate");
-  };
-
-  this.update = function update(){
-    console.log("MenuState.update");
-  };
+  OverlayState.call(this);
 };
 
-MenuState.prototype = new OverlayState();
+MenuState.prototype = Object.create(OverlayState.prototype);
+
+MenuState.prototype.startGame = null;
+MenuState.prototype.showPopup = null;
+
+MenuState.prototype.activate = function activate(){
+  console.log("MenuState.activate");
+};
+
+MenuState.prototype.deactivate = function deactivate(){
+  console.log("MenuState.deactivate");
+};
+
+MenuState.prototype.update = function update(){
+  console.log("MenuState.update");
+};
