@@ -7,5 +7,11 @@
 
         gameworkContainer = document.getElementById('canvas-container');
 		gameworkContainer.appendChild(app.view);
+
+        app.ticker.add(update);
+    }
+
+    LD.update = function update(delta) {
+        // Update
     }
 }(window.LD = window.LD || {}));
