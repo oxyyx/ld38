@@ -1,13 +1,11 @@
-(function(PJB) {
-    var renderer = null;
+(function(LD) {
+    var app = null;
+    var gameworkContainer;
 
-    PJB.initialize = function initialize() {
-        renderer = new PIXI.autoDetectRenderer(1280, 720);
-		renderer.backgroundColor = 0xFFFFFF;
+    LD.initialize = function initialize() {
+        app = new PIXI.Application(1280, 720, {backgroundColor : 0x1099bb});
 
         gameworkContainer = document.getElementById('canvas-container');
-		gameworkContainer.appendChild(renderer.view);
-
-        stage = new PIXI.Container();
+		gameworkContainer.appendChild(app.view);
     }
-}(window.PJB = window.PJB || {}));
+}(window.LD = window.LD || {}));
