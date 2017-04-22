@@ -41,6 +41,10 @@
     return spriteContainer;
   }
 
+  Grid.getTileAmounts = function getTileAmounts(){
+
+  }
+
   function initializeTileData(imageName, key){
     var texture = PIXI.Texture.fromImage(imageName);
     tileTextures[key] = texture;
@@ -63,8 +67,8 @@
     function onTileClicked(){
       var tileIndex = getTileIndex(x, y);
       var activeTile = LD.activeTile;
-      spriteContainer.children[tileIndex].texture = tileTextures['special']
-      //tiles[tileIndex] = activeTile.id;
+      spriteContainer.children[tileIndex].texture = LD.activeTile.texture;
+      tiles[tileIndex] = activeTile.id;
     }
 
     return sprite;

@@ -26,6 +26,9 @@
         uiContainer.x = 1100;
 
         app.stage.addChild(background);
+
+        var gridContainer = LD.Grid.initialize(13, 11, 11, 9, 64, 64);
+        app.stage.addChild(gridContainer);
         app.stage.addChild(uiContainer);
         app.ticker.add(LD.update);
     }
