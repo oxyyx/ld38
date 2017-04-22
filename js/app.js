@@ -11,6 +11,16 @@
     var water = 0;
     var electricity = 0;
 
+    Array.prototype.contains = function(obj) {
+        var i = this.length;
+        while (i--) {
+            if (this[i] === obj) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     LD.initialize = function initialize() {
         app = new PIXI.Application(1280, 720, {backgroundColor : 0x9FD4E3});
 
@@ -64,4 +74,17 @@
         electricity = value;
         LD.UI.setElectricity(value);
     }
+
+    var mustSwitchToUnderground = true;
+    window.addEventListener('keydown', function(){
+        console.log("key down!s");
+        if(mustSwitchToUnderground) {
+             LD.Grid.switchToUnderground(app.stage);
+        }
+        else {
+            LD.Grid.switchToSurface(app.stage);
+        }
+
+        mustSwitchToUnderground = !mustSwitchToUnderground;
+    })
 }(window.LD = window.LD || {}));
