@@ -22,24 +22,24 @@
             uiContainer.height = height;
 
             backgroundGraphics = new PIXI.Graphics();
-            backgroundGraphics.beginFill(0xEEEEEE);
+            backgroundGraphics.beginFill(0x333333);
             backgroundGraphics.drawRect(0, 0, width, height);
 
             uiContainer.addChild(backgroundGraphics);
 
-            currencyText = new PIXI.Text(0, { fontSize: 20 });
+            currencyText = new PIXI.Text(0, { fontSize: 20, fill : 0xffffff});
             currencyText.y = 0;
 
-            technologyText = new PIXI.Text(0, { fontSize: 20 });
+            technologyText = new PIXI.Text(0, { fontSize: 20, fill : 0xffffff });
             technologyText.y = 20;
 
-            foodText = new PIXI.Text(0, { fontSize: 20 });
+            foodText = new PIXI.Text(0, { fontSize: 20, fill : 0xffffff });
             foodText.y = 40;
 
-            waterText = new PIXI.Text(0, { fontSize: 20 });
+            waterText = new PIXI.Text(0, { fontSize: 20, fill : 0xffffff });
             waterText.y = 60;
 
-            electricityText = new PIXI.Text(0, { fontSize: 20 });
+            electricityText = new PIXI.Text(0, { fontSize: 20, fill : 0xffffff });
             electricityText.y = 80;
 
             houseButton = PIXI.Sprite.fromImage('img/house.png');
