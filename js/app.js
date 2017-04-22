@@ -8,7 +8,7 @@
         gameworkContainer = document.getElementById('canvas-container');
 		gameworkContainer.appendChild(app.view);
 
-        app.ticker.add(update);
+        app.ticker.add(LD.update);
     }
 
     LD.update = function update(delta) {
