@@ -1,6 +1,10 @@
 (function(LD) {
     var app = null;
     var gameworkContainer;
+    var uiContainer;
+    var backgroundFilter;
+
+    var background;
 
     var currency = 0;
     var technology = 0;
@@ -11,11 +15,25 @@
     LD.initialize = function initialize() {
         app = new PIXI.Application(1280, 720, {backgroundColor : 0x1099bb});
 
+        background = PIXI.Sprite.fromImage('img/jebroer.jpg');
+        background.width = app.renderer.width;
+        background.height = app.renderer.height;
+
         gameworkContainer = document.getElementById('canvas-container');
 		gameworkContainer.appendChild(app.view);
         
-        app.stage.addChild(LD.UI.initialize());
+        uiContainer = LD.UI.initialize(180, 720);
+        uiContainer.x = 1100;
+
+        app.stage.addChild(background);
+        app.stage.addChild(uiContainer);
         app.ticker.add(LD.update);
+    }
+
+    LD.activeTile = {id: null, texture: null};
+
+    LD.setActiveTile = function setActiveTile(id, texture) {
+        LD.activeTile = {id: id, texture: texture};
     }
 
     LD.update = function update(delta) {
