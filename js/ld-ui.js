@@ -1,8 +1,7 @@
 (function(LD) {
     (function(UI) {
         var uiContainer;
-        var backgroundGraphics;
-
+        
         var currencyText;
         var technologyText;
         var foodText;
@@ -26,12 +25,6 @@
             uiContainer = new PIXI.Container();
             uiContainer.width = width;
             uiContainer.height = height;
-
-            backgroundGraphics = new PIXI.Graphics();
-            backgroundGraphics.beginFill(0x999999);
-            backgroundGraphics.drawRect(0, 0, width, height);
-
-            uiContainer.addChild(backgroundGraphics);
 
             // Currencies & values 
             currencyText = createSidebarValue(uiContainer, 8, 6, 160, 32, 'img/money.png');
