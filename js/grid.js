@@ -11,11 +11,13 @@
     var playableArea = {xStart: 0, yStart: 0, width: 0, height: 0};
     var tileWidth = 0;
     var tileHeight = 0;
+    var buildingConstructors = {};
     
     var pipelineConnection = null;
     var electricityConnection = null;
-    var defaultConnectionTextures = null;
-    
+    var defaultConnectionTiles = null;
+
+    Grid.onTileSelected = null;
     
     Grid.initialize = function initialize(totalWidth, totalHeight, playableWidth, playableHeight, pTileWidth, pTileHeight){
         gridWidth = totalWidth;
@@ -28,6 +30,14 @@
         
         tileWidth = pTileWidth;
         tileHeight = pTileHeight;
+
+        buildingConstructors[new House().id] = House;
+        buildingConstructors[new Industry().id] = Industry;
+        buildingConstructors[new ShopEntertainment().id] = ShopEntertainment;
+        buildingConstructors[new Farm().id] = Farm;
+        buildingConstructors[new Road().id] = Road;
+        buildingConstructors[new Pipeline().id] = Pipeline;
+        buildingConstructors[new Powerline().id] = Powerline;
         
         initializeTileData('img/farmland.png', 'default');
         initializeTileData('img/industry.png', 'special');
@@ -35,7 +45,7 @@
         initializeTileData('img/powercable.png', 'powercable');
         initializeTileData('img/road.png', 'road');
         
-        defaultConnectionTextures = [{spriteContainer: undergroundSpriteContainer, texture: tileTextures['pipeline']}, {spriteContainer: undergroundSpriteContainer, texture: tileTextures['powercable']}, {spriteContainer: surfaceSpriteContainer, texture: tileTextures['road']}];
+        defaultConnectionTiles = [new buildingConstructors[new Pipeline().id], new buildingConstructors[new Powerline().id], new buildingConstructors[new Road().id]];
         
         intitializeSurfaceTiles();
         initializeUndergroundTiles();
@@ -74,11 +84,11 @@
                 var tileIndex = getTileIndex(x, y);
                 
                 if(x >= playableArea.xStart && x < playableArea.xStart + playableArea.width && y >= playableArea.yStart && y < playableArea.yStart + playableArea.height){
-                    surfaceTiles[tileIndex] = {id: 1};
+                    surfaceTiles[tileIndex] = new buildingConstructors[new Farm().id]();
                     surfaceSpriteContainer.addChildAt(createSpriteAtPosition('special', x, y), tileIndex);
                 }
                 else{
-                    surfaceTiles[tileIndex] = {id: 0};
+                    surfaceTiles[tileIndex] = new buildingConstructors[new Industry().id]();
                     surfaceSpriteContainer.addChildAt(createSpriteAtPosition('default', x, y), tileIndex);
                 }        
             }
@@ -91,22 +101,25 @@
                 var tileIndex = getTileIndex(x, y);
                 
                 if(x >= playableArea.xStart && x < playableArea.xStart + playableArea.width && y >= playableArea.yStart && y < playableArea.yStart + playableArea.height){
-                    undergroundTiles[tileIndex] = {id: 1};
+                    surfaceTiles[tileIndex] = new buildingConstructors[new Farm().id]();
                     undergroundSpriteContainer.addChildAt(createSpriteAtPosition('default', x, y), tileIndex);
                 }
                 else{
-                    undergroundTiles[tileIndex] = {id: 0};
+                    surfaceTiles[tileIndex] = new buildingConstructors[new Industry().id]();
                     undergroundSpriteContainer.addChildAt(createSpriteAtPosition('default', x, y), tileIndex);
                 }
             }
         }
         
-        for(var i = 0; i < defaultConnectionTextures.length; i++){
-            while(!generateDefaultConnections(defaultConnectionTextures[i].spriteContainer, defaultConnectionTextures[i].texture));
+        for(var i = 0; i < defaultConnectionTiles.length; i++){
+            while(!generateDefaultConnections(defaultConnectionTiles[i]));
         }
     }
     
-    function generateDefaultConnections(spriteContainer, texture){
+    function generateDefaultConnections(tile){
+        var spriteContainer = tile.isUnderground ? undergroundSpriteContainer : surfaceSpriteContainer;
+        var tilesArray = tile.isUnderground ? undergroundTiles : surfaceTiles;
+
         var pipelineConnectionAtHorizontalEdge = Math.round(Math.random()) == 1;
         var pipelineConnectionAtFarEdge = Math.round(Math.random()) == 1;
         
@@ -116,21 +129,23 @@
             if(pipelineConnectionAtFarEdge){
                 for(var i = playableArea.yStart + playableArea.height; i < gridHeight; i++){
                     var tileIndex = getTileIndex(pipelineConnectionX, i);
-                    if(defaultConnectionTextures.contains(spriteContainer.children[tileIndex].texture)){
+                    if(defaultConnectionTiles.contains(spriteContainer.children[tileIndex].texture)){
                         return false;
                     }
                     
-                    spriteContainer.children[tileIndex].texture = texture;
+                    spriteContainer.children[tileIndex].texture = tile.texture;
+                    tilesArray[tileIndex] = tile;
                 }
             }
             else{
                 for(var i = 0; i < playableArea.yStart; i++){
                     var tileIndex = getTileIndex(pipelineConnectionX, i);
-                    if(defaultConnectionTextures.contains(spriteContainer.children[tileIndex].texture)){
+                    if(defaultConnectionTiles.contains(spriteContainer.children[tileIndex].texture)){
                         return false;
                     }
                     
-                    spriteContainer.children[tileIndex].texture = texture;
+                    spriteContainer.children[tileIndex].texture = tile.texture;
+                    tilesArray[tileIndex] = tile;
                 }
             }      
         }
@@ -140,21 +155,23 @@
             if(pipelineConnectionAtFarEdge){
                 for(var i = playableArea.xStart + playableArea.width; i < gridWidth; i++){
                     var tileIndex = getTileIndex(i, pipelineConnectionY);
-                    if(defaultConnectionTextures.contains(spriteContainer.children[tileIndex].texture)){
+                    if(defaultConnectionTiles.contains(spriteContainer.children[tileIndex].texture)){
                         return false;
                     }
                     
-                    spriteContainer.children[tileIndex].texture = texture;
+                    spriteContainer.children[tileIndex].texture = tile.texture;
+                    tilesArray[tileIndex] = tile;
                 }
             }
             else{
                 for(var i = 0; i < playableArea.xStart; i++){
                     var tileIndex = getTileIndex(i, pipelineConnectionY);
-                    if(defaultConnectionTextures.contains(spriteContainer.children[tileIndex].texture)){
+                    if(defaultConnectionTiles.contains(spriteContainer.children[tileIndex].texture)){
                         return false;
                     }
                     
-                    spriteContainer.children[tileIndex].texture = texture;
+                    spriteContainer.children[tileIndex].texture = tile.texture;
+                    tilesArray[tileIndex] = tile;
                 }
             }
         }
@@ -182,82 +199,37 @@
         }
         
         function onTileClicked(){
-            var activeTile = LD.activeTile;
-            if(activeTile != null && activeTile.texture != null && activeTile.id != null){
-                var tileIndex = getTileIndex(x, y);      
-                activeSpriteContainer.children[tileIndex].texture = LD.activeTile.texture;
-                activeTiles[tileIndex] = activeTile.id;
+            var activeTile = new LD.activeTileConstructor();
+            if(activeTile != null){
+                var tileIndex = getTileIndex(x, y);
+                if(checkCanPlaceTile(activeTile)){
+                    activeSpriteContainer.children[tileIndex].texture = LD.activeTile.texture;
+                    activeTiles[tileIndex] = activeTile; 
+                }
             }
             else{
-                // Select tile.
+                if(LD.Grid.onTileSelected != null){
+                    LD.Grid.onTileSelected();
+                }
             }
         }
         
         return sprite;
+    }
+
+    function checkCanPlaceTile(activeTile){
+        var canPlace = false;
+        if(activeTile.isUnderground && activeSpriteContainer == undergroundSpriteContainer && activeTile == undergroundTiles){
+            canPlace = true;
+        }
+        if(!activeTile.isUnderground && activeSpriteContainer == surfaceSpriteContainer && activeTile == surfaceTiles){
+            canPlace = true;
+        }
+
+        return canPlace;
     }
     
     function getTileIndex(x, y){
         return (y * gridWidth) + x;
     }
 }(window.LD.Grid = window.LD.Grid || {}));
-
-
-
-
-
-
-
-
-function Building(){}
-Building.prototype.id = -1;
-Building.prototype.income = 0;
-Building.prototype.initialCost = 0;
-Building.prototype.maintenanceCost = 0;
-Building.prototype.level = 0;
-Building.prototype.texture = null;
-
-function House(){
-    this.id = 0;
-    this.income = 5;
-    this.initialCost = 100;
-}
-House.prototype = Building.prototype;
-
-function Industry(){
-    this.id = 1;
-    this.initialCost = 100;
-}
-Industry.prototype = Building.prototype;
-
-function ShopEntertainment(){
-    this.id = 2;
-    this.initialCost = 100;
-}
-ShopEntertainment.prototype = Building.prototype;
-
-function Farm(){
-    this.id = 3;
-    this.initialCost = 100;
-}
-Farm.prototype = Building.prototype;
-
-function Road(){
-    this.id = 4;
-    this.initialCost = 100;
-    this.maintenanceCost = 20;
-}
-Road.prototype = Building.prototype;
-
-function Pipeline(){
-    this.id = 5;
-    this.initialCost = 100;
-    this.maintenanceCost = 20;
-}
-Road.prototype = Building.prototype;
-
-function Powerline(){
-    this.id = 6;
-    this.initialCost = 100;
-    this.maintenanceCost = 20;
-}
-Road.prototype = Building.prototype;

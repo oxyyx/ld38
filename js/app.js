@@ -38,7 +38,7 @@
         app.ticker.add(LD.update);
     }
 
-    LD.activeTile = {id: null, texture: null};
+    LD.activeTileConstructor = null;
 
     LD.setActiveTile = function setActiveTile(id, texture) {
         LD.activeTile = {id: id, texture: texture};
