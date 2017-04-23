@@ -82,11 +82,6 @@
         totalCurrency += incomeSum;
 
         setCurrency(totalCurrency);
-        setTechnology(20);
-        setFood(30);
-        setWater(40);
-        setElectricity(50);
-        setWork(60);
 
         var populationCapacity = tiles.reduce(
             function(acc, val){

@@ -36,12 +36,13 @@
 
             // Currencies & values 
             currencyText = createSidebarValue(uiContainer, 8, 6, 160, 32, 'img/money.png');
-            technologyText = createSidebarValue(uiContainer, 8, 44, 160, 32, 'img/tech.png');
-            foodText = createSidebarValue(uiContainer, 8, 82, 160, 32, 'img/food.png');
-            waterText = createSidebarValue(uiContainer, 8, 120, 160, 32, 'img/water.png');
-            electricityText = createSidebarValue(uiContainer, 8, 158, 160, 32, 'img/electricity.png');
-            workText = createSidebarValue(uiContainer, 8, 196, 160, 32, 'img/work.png');
-            peopleText = createSidebarValue(uiContainer, 8, 234, 160, 32, 'img/people.png');
+            peopleText = createSidebarValue(uiContainer, 8, 44, 160, 32, 'img/people.png');
+            technologyText = createSidebarValue(uiContainer, 8, 82, 160, 32, 'img/tech.png');
+            foodText = createSidebarValue(uiContainer, 8, 120, 160, 32, 'img/food.png');
+            waterText = createSidebarValue(uiContainer, 8, 158, 160, 32, 'img/water.png');
+            electricityText = createSidebarValue(uiContainer, 8, 196, 160, 32, 'img/electricity.png');
+            workText = createSidebarValue(uiContainer, 8, 234, 160, 32, 'img/work.png');
+
 
             // Buildings
             var buildingBackground = new PIXI.Graphics();
