@@ -30,8 +30,8 @@
         tileWidth = pTileWidth;
         tileHeight = pTileHeight;
         
-        initializeTileData('img/farmland.png', 'default');
-        initializeTileData('img/industry.png', 'special');
+        initializeTileData('img/grass.png', 'default');
+        initializeTileData('img/dirt.png', 'special');
         initializeTileData('img/pipeline.png', 'pipeline');
         initializeTileData('img/powercable.png', 'powercable');
         initializeTileData('img/road.png', 'road');
