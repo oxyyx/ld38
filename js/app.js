@@ -7,7 +7,7 @@
 
     var eventListeners = {};
 
-    var currency = 0;
+    var currency = 10000;
     var technology = 0;
     var food = 0;
     var water = 0;
@@ -60,7 +60,7 @@
     }
 
     LD.update = function update(delta) {
-        setCurrency(10);
+        setCurrency(10000);
         setTechnology(20);
         setFood(30);
         setWater(40);
