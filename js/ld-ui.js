@@ -1,7 +1,7 @@
 (function(LD) {
     (function(UI) {
         var uiContainer;
-        
+
         var currencyText;
         var technologyText;
         var foodText;
@@ -53,8 +53,8 @@
             transportText.y = 450;
 
             roadButton = createSidebarTile(uiContainer, 18, 480, 'road', 'img/road.png');
-            pipeButton = createSidebarTile(uiContainer, 98, 480, 'pipe', 'img/road.png');
-            powerCableButton = createSidebarTile(uiContainer, 18, 560, 'powercable', 'img/road.png');
+            pipeButton = createSidebarTile(uiContainer, 98, 480, 'pipe', 'img/pipeline.png');
+            powerCableButton = createSidebarTile(uiContainer, 18, 560, 'powercable', 'img/powercable.png');
 
             uiContainer.addChild(transportText);
 
