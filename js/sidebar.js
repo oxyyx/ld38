@@ -49,17 +49,12 @@
             buildingBackground.beginFill(0x888888);
             buildingBackground.drawRect(8, 270, 160, 180);
 
-            var buildingHeaderBackground = new PIXI.Graphics();
-            buildingHeaderBackground.beginFill(0x333333);
-            buildingHeaderBackground.drawRect(8, 270, 160, 24);
-
-            var buildingsText = new PIXI.Text('BUILDINGS', sideBarTextStyle); 
-            buildingsText.x = 35;
-            buildingsText.y = 272;
+            var buildingsHeader = PIXI.Sprite.fromImage('img/buildingsHeader.png');
+            buildingsHeader.x = 8;
+            buildingsHeader.y = 270;
 
             uiContainer.addChild(buildingBackground);
-            uiContainer.addChild(buildingHeaderBackground);
-            uiContainer.addChild(buildingsText);
+            uiContainer.addChild(buildingsHeader);
 
             houseButton = createSidebarTile(uiContainer, 18, 300, 'house', 'img/house.png');
             farmButton = createSidebarTile(uiContainer, 98, 300, 'farm', 'img/farmland.png');
@@ -67,21 +62,16 @@
             shopButton = createSidebarTile(uiContainer, 98, 380, 'shop', 'img/shop.png');
 
             // Transport
+            var transportHeader = PIXI.Sprite.fromImage('img/transportHeader.png');
+            transportHeader.x = 8;
+            transportHeader.y = 455;
+
             var transportBackground = new PIXI.Graphics();
             transportBackground.beginFill(0x888888);
             transportBackground.drawRect(8, 455, 160, 180);
 
-            var transportHeaderBackground = new PIXI.Graphics();
-            transportHeaderBackground.beginFill(0x333333);
-            transportHeaderBackground.drawRect(8, 455, 160, 24);
-
-            var transportText = new PIXI.Text('TRANSPORT', sideBarTextStyle); 
-            transportText.x = 30;
-            transportText.y = 457;
-
             uiContainer.addChild(transportBackground);
-            uiContainer.addChild(transportHeaderBackground);
-            uiContainer.addChild(transportText);
+            uiContainer.addChild(transportHeader);
 
             roadButton = createSidebarTile(uiContainer, 18, 485, 'road', 'img/road.png');
             pipeButton = createSidebarTile(uiContainer, 98, 485, 'pipe', 'img/pipeline.png');
