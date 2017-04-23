@@ -30,11 +30,11 @@
             uiContainer.addChild(backgroundGraphics);
 
             // Currencies & values 
-            currencyText = createSidebarValue(uiContainer, 10, 10, 160, 32, 'img/money_icon.png');
-            technologyText = createSidebarValue(uiContainer, 10, 50, 160, 32, 'img/money_icon.png');
-            foodText = createSidebarValue(uiContainer, 10, 90, 160, 32, 'img/money_icon.png');
-            waterText = createSidebarValue(uiContainer, 10, 130, 160, 32, 'img/money_icon.png');
-            electricityText = createSidebarValue(uiContainer, 10, 170, 160, 32, 'img/energy_icon.png');
+            currencyText = createSidebarValue(uiContainer, 8, 6, 160, 32, 'img/money.png');
+            technologyText = createSidebarValue(uiContainer, 8, 44, 160, 32, 'img/tech.png');
+            foodText = createSidebarValue(uiContainer, 8, 82, 160, 32, 'img/food.png');
+            waterText = createSidebarValue(uiContainer, 8, 120, 160, 32, 'img/water.png');
+            electricityText = createSidebarValue(uiContainer, 8, 158, 160, 32, 'img/electricity.png');
 
             // Buildings
             var buildingsText = new PIXI.Text('BUILDINGS', { fontSize: 20, fill : 0x000000 }); 
@@ -64,8 +64,8 @@
 
         function createSidebarValue(container, x, y, width, height, icon) {
             var valueBackground = new PIXI.Graphics();
-            valueBackground.beginFill(0x333333);
-            valueBackground.drawRect(x, y, width, height);
+            valueBackground.beginFill(0x666666);
+            valueBackground.drawRect(x + 8, y + 2, width - 8, height - 4);
 
             var valueIcon = PIXI.Sprite.fromImage(icon);
             valueIcon.x = x
