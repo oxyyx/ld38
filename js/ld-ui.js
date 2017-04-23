@@ -1,7 +1,7 @@
 (function(LD) {
     (function(UI) {
         var uiContainer;
-        
+
         var currencyText;
         var technologyText;
         var foodText;
@@ -53,8 +53,8 @@
             transportText.y = 450;
 
             roadButton = createSidebarTile(uiContainer, 18, 480, 'road', 'img/road.png');
-            pipeButton = createSidebarTile(uiContainer, 98, 480, 'pipe', 'img/road.png');
-            powerCableButton = createSidebarTile(uiContainer, 18, 560, 'powercable', 'img/road.png');
+            pipeButton = createSidebarTile(uiContainer, 98, 480, 'pipe', 'img/pipeline.png');
+            powerCableButton = createSidebarTile(uiContainer, 18, 560, 'powercable', 'img/powercable.png');
 
             uiContainer.addChild(transportText);
 
@@ -110,31 +110,31 @@
         }
 
         UI.setCurrency = function setCurrency(value) {
-            currencyText.text = value;
+            currencyText.text = value.formatCustom(0, '.', ',');
         }
 
         UI.setTechnology = function setTechnology(value) {
-            technologyText.text = value;
+            technologyText.text = value.formatCustom(0, '.', ',');
         }
 
         UI.setFood = function setFood(value) {
-            foodText.text = value;
+            foodText.text = value.formatCustom(0, '.', ',');
         }
 
         UI.setWater = function setWater(value) {
-            waterText.text = value;
+            waterText.text = value.formatCustom(0, '.', ',');
         }
 
         UI.setElectricity = function setElectricity(value) {
-            electricityText.text = value;
+            electricityText.text = value.formatCustom(0, '.', ',');
         }
 
         UI.setWork = function setWork(value) {
-            workText.text = value;
+            workText.text = value.formatCustom(0, '.', ',');
         }
 
         UI.setPeople = function setPeople(value) {
-            peopleText.text = value;
+            peopleText.text = value.formatCustom(0, '.', ',');
         }
     }(window.LD.UI = window.LD.UI || {}));
 }(window.LD = window.LD || {}));
