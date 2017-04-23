@@ -67,3 +67,15 @@ function Powerline(){
     this.texture = PIXI.Texture.fromImage('img/powercable.png');
 }
 Road.prototype = Tile.prototype;
+
+(function(TileStorage){
+    TileStorage.buildingConstructors = {};
+
+    TileStorage.buildingConstructors[new House().id] = House;
+    TileStorage.buildingConstructors[new Industry().id] = Industry;
+    TileStorage.buildingConstructors[new ShopEntertainment().id] = ShopEntertainment;
+    TileStorage.buildingConstructors[new Farm().id] = Farm;
+    TileStorage.buildingConstructors[new Road().id] = Road;
+    TileStorage.buildingConstructors[new Pipeline().id] = Pipeline;
+    TileStorage.buildingConstructors[new Powerline().id] = Powerline;
+})(window.LD.TileStorage = window.LD.TileStorage || {});
