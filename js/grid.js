@@ -92,11 +92,11 @@
                 var tileIndex = getTileIndex(x, y);
                 
                 if(x >= playableArea.xStart && x < playableArea.xStart + playableArea.width && y >= playableArea.yStart && y < playableArea.yStart + playableArea.height){
-                    surfaceTiles[tileIndex] = new LD.TileStorage.buildingConstructors[new Farm().id]();
+                    undergroundTiles[tileIndex] = new LD.TileStorage.buildingConstructors[new Farm().id]();
                     undergroundSpriteContainer.addChildAt(createSpriteAtPosition('default', x, y), tileIndex);
                 }
                 else{
-                    surfaceTiles[tileIndex] = new LD.TileStorage.buildingConstructors[new Industry().id]();
+                    undergroundTiles[tileIndex] = new LD.TileStorage.buildingConstructors[new Industry().id]();
                     undergroundSpriteContainer.addChildAt(createSpriteAtPosition('default', x, y), tileIndex);
                 }
             }
@@ -191,9 +191,12 @@
         
         function onTileClicked(){
             var activeTile = new LD.activeTileConstructor();
+
             if(activeTile != null){
-                var tileIndex = getTileIndex(x, y);
-                if(checkCanPlaceTile(activeTile)){
+                var canPlace = checkCanPlaceTile(activeTile, x, y);
+
+                if(canPlace){
+                    var tileIndex = getTileIndex(x, y);
                     activeSpriteContainer.children[tileIndex].texture = activeTile.texture;
                     activeTiles[tileIndex] = activeTile;
                 }
@@ -208,16 +211,55 @@
         return sprite;
     }
 
-    function checkCanPlaceTile(activeTile){
-        var canPlace = false;
-        if(activeTile.isUnderground && activeSpriteContainer == undergroundSpriteContainer && activeTile == undergroundTiles){
-            canPlace = true;
-        }
-        if(!activeTile.isUnderground && activeSpriteContainer == surfaceSpriteContainer && activeTile == surfaceTiles){
-            canPlace = true;
+    function checkCanPlaceTile(activeTile, x, y){
+        var undergroundAndCanBePlaced = activeTile.isUnderground && activeSpriteContainer == undergroundSpriteContainer && activeTiles == undergroundTiles;
+        var surfaceAndCanbePlaced = !activeTile.isUnderground && activeSpriteContainer == surfaceSpriteContainer && activeTiles == surfaceTiles;
+
+        if(!undergroundAndCanBePlaced && !surfaceAndCanbePlaced){
+            return false;
         }
 
-        return canPlace;
+        if(activeTile.id == 'road'){
+            return checkHasConnectionOfType(activeTile, x, y);
+        }
+        else if(activeTile.id == 'pipe'){
+            return checkHasConnectionOfType(activeTile, x, y);
+        }
+        else if(activeTile.id == 'powercable'){
+            return checkHasConnectionOfType(activeTile, x, y);
+        }
+
+        return true;
+    }
+
+    function checkHasConnectionOfType(activeTile, x, y){
+        
+        if(x - 1 >= 0){
+            var tileIndex = getTileIndex(x - 1, y);
+            if(activeTiles[tileIndex].id == activeTile.id){
+                return true;
+            }
+        }
+        if(x + 1 < gridWidth){
+            var tileIndex = getTileIndex(x + 1, y);
+            if(activeTiles[tileIndex].id == activeTile.id){
+                return true;
+            }
+        }
+        if(y - 1 >= 0){
+            var tileIndex = getTileIndex(x, y - 1);
+            if(activeTiles[tileIndex].id == activeTile.id){
+                return true;
+            }
+        }
+        if(y + 1 < gridHeight){
+            var tileIndex = getTileIndex(x, y + 1);
+            if(activeTiles[tileIndex].id == activeTile.id){
+                return true;
+            }
+        }
+
+        return false;
     }
     
     function getTileIndex(x, y){
