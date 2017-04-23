@@ -62,14 +62,38 @@
         LD.UI.StatusBar.clearActiveBuilding();
     }
 
+    var totalCurrency = 0;
+    var milisecondsCounter = 0;
+    const updateEveryMS = 250;
     LD.update = function update(delta) {
-        setCurrency(10000);
+        milisecondsCounter += app.ticker.elapsedMS;
+        if(milisecondsCounter < updateEveryMS){
+            return;
+        }
+        milisecondsCounter -= updateEveryMS;
+
+        var tiles = LD.Grid.getTiles();
+        var incomeSum = 0;
+        for(var i = 0; i < tiles.length; i++){
+            incomeSum += tiles[i].getCurrentIncome();
+            incomeSum -= tiles[i].getCurrentCost();
+        }
+        totalCurrency += incomeSum;
+
+        setCurrency(totalCurrency);
         setTechnology(20);
         setFood(30);
         setWater(40);
         setElectricity(50);
         setWork(60);
-        setPeople(70);
+
+        var populationCapacity = tiles.reduce(
+            function(acc, val){
+                return acc + val.populationCapacity;
+            },
+         0);
+
+        setPeople(populationCapacity);
     }
 
     LD.addEventListener = function addEventListener(eventName, eventHandler) {

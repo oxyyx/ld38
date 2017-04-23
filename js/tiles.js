@@ -6,11 +6,27 @@ Tile.prototype.maintenanceCost = 0;
 Tile.prototype.level = 0;
 Tile.prototype.texture = null;
 Tile.prototype.isUnderground = false;
+Tile.prototype.hasWater = false;
+Tile.prototype.hasElectricity = false;
+Tile.prototype.hasRoad = false;
+Tile.prototype.isDefaultTile = false;
+Tile.prototype.populationCapacity = 0;
 Tile.prototype.getCurrentUpgradeCost = function getCurrentUpgradeCost(){
     return (this.initialCost + (200 * this.level)) + 200;
 }
-Tile.prototype.getCurrentIncome = function getCurrentUpgradeCost(){
+Tile.prototype.getCurrentIncome = function getCurrentIncome(){
+    if(this.isDefaultTile){
+        return 0;
+    }
+
     return (this.level * 35) / (this.level + 2.5) + this.baseIncome;
+}
+Tile.prototype.getCurrentCost = function getCurrentCost(){
+    if(this.isDefaultTile){
+        return 0;
+    }
+
+    return (0.5 * this.level * 35) / ( 0.5 * this.level + 2.5) + this.maintenanceCost;
 }
 
 function House(){
@@ -18,6 +34,7 @@ function House(){
     this.baseIncome = 5;
     this.initialCost = 100;
     this.texture = PIXI.Texture.fromImage('img/house.png');
+    this.populationCapacity = 10;
 }
 House.prototype = Tile.prototype;
 
@@ -53,11 +70,11 @@ Road.prototype = Tile.prototype;
 function Pipeline(){
     this.id = 'pipe';
     this.initialCost = 100;
-    this.maintenanceCost = 20;
+    this.maintenanceCost = 20 ;
     this.isUnderground = true;
     this.texture = PIXI.Texture.fromImage('img/pipeline.png');
 }
-Road.prototype = Tile.prototype;
+Pipeline.prototype = Tile.prototype;
 
 function Powerline(){
     this.id = 'powercable';
@@ -66,7 +83,14 @@ function Powerline(){
     this.isUnderground = true;
     this.texture = PIXI.Texture.fromImage('img/powercable.png');
 }
-Road.prototype = Tile.prototype;
+Powerline.prototype = Tile.prototype;
+
+function PassiveTile(){
+    this.id = 'passive';
+    this.getCurrentIncome = function(){ return 0; }
+    this.getCurrentCost = function() { return 0; }
+}
+PassiveTile.prototype = Tile.prototype;
 
 (function(TileStorage){
     TileStorage.buildingConstructors = {};

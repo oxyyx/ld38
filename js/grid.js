@@ -11,7 +11,7 @@
     var playableArea = {xStart: 0, yStart: 0, width: 0, height: 0};
     var tileWidth = 0;
     var tileHeight = 0;
-    
+
     var pipelineConnection = null;
     var electricityConnection = null;
     var defaultConnectionTiles = null;
@@ -36,7 +36,13 @@
         initializeTileData('img/powercable.png', 'powercable');
         initializeTileData('img/road.png', 'road');
         
-        defaultConnectionTiles = [new LD.TileStorage.buildingConstructors[new Pipeline().id], new LD.TileStorage.buildingConstructors[new Powerline().id], new LD.TileStorage.buildingConstructors[new Road().id]];
+        var pipeline = new Pipeline();
+        pipeline.isDefaultTile = true;
+        var powercable = new Powerline();
+        powercable.isDefaultTile = true;
+        var road = new Road();
+        road.isDefaultTile = true;
+        defaultConnectionTiles = [pipeline, powercable, road];
         
         intitializeSurfaceTiles();
         initializeUndergroundTiles();
@@ -65,8 +71,8 @@
         stage.addChildAt(surfaceSpriteContainer, undergroundSpriteContainerStageIndex);
     }
     
-    Grid.getTileAmounts = function getTileAmounts(){
-        
+    Grid.getTiles = function getTiles(){
+        return surfaceTiles.concat(undergroundTiles);
     }
     
     function intitializeSurfaceTiles(){
@@ -75,11 +81,11 @@
                 var tileIndex = getTileIndex(x, y);
                 
                 if(x >= playableArea.xStart && x < playableArea.xStart + playableArea.width && y >= playableArea.yStart && y < playableArea.yStart + playableArea.height){
-                    surfaceTiles[tileIndex] = new LD.TileStorage.buildingConstructors[new Farm().id]();
+                    surfaceTiles[tileIndex] = new PassiveTile();
                     surfaceSpriteContainer.addChildAt(createSpriteAtPosition('special', x, y), tileIndex);
                 }
                 else{
-                    surfaceTiles[tileIndex] = new LD.TileStorage.buildingConstructors[new Industry().id]();
+                    surfaceTiles[tileIndex] = new PassiveTile();
                     surfaceSpriteContainer.addChildAt(createSpriteAtPosition('default', x, y), tileIndex);
                 }        
             }
@@ -92,11 +98,11 @@
                 var tileIndex = getTileIndex(x, y);
                 
                 if(x >= playableArea.xStart && x < playableArea.xStart + playableArea.width && y >= playableArea.yStart && y < playableArea.yStart + playableArea.height){
-                    undergroundTiles[tileIndex] = new LD.TileStorage.buildingConstructors[new Farm().id]();
+                    undergroundTiles[tileIndex] = new PassiveTile();
                     undergroundSpriteContainer.addChildAt(createSpriteAtPosition('default', x, y), tileIndex);
                 }
                 else{
-                    undergroundTiles[tileIndex] = new LD.TileStorage.buildingConstructors[new Industry().id]();
+                    undergroundTiles[tileIndex] = new PassiveTile();
                     undergroundSpriteContainer.addChildAt(createSpriteAtPosition('default', x, y), tileIndex);
                 }
             }
@@ -190,9 +196,8 @@
         }
         
         function onTileClicked(){
-            var activeTile = new LD.activeTileConstructor();
-
-            if(activeTile != null){
+            if(LD.activeTileConstructor != null){
+                var activeTile = new LD.activeTileConstructor();            
                 var canPlace = checkCanPlaceTile(activeTile, x, y);
 
                 if(canPlace){
