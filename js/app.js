@@ -4,7 +4,6 @@
     var uiContainer;
     var backgroundFilter;
 
-    var background;
 
     var currency = 0;
     var technology = 0;
@@ -12,22 +11,28 @@
     var water = 0;
     var electricity = 0;
 
-    LD.initialize = function initialize() {
-        app = new PIXI.Application(1280, 720, {backgroundColor : 0x1099bb});
+    Array.prototype.contains = function(obj) {
+        var i = this.length;
+        while (i--) {
+            if (this[i] === obj) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-        background = PIXI.Sprite.fromImage('img/jebroer.jpg');
-        background.width = app.renderer.width;
-        background.height = app.renderer.height;
+    LD.initialize = function initialize() {
+        app = new PIXI.Application(1280, 720, {backgroundColor : 0x9FD4E3});
 
         gameworkContainer = document.getElementById('canvas-container');
 		gameworkContainer.appendChild(app.view);
         
         uiContainer = LD.UI.initialize(180, 720);
         uiContainer.x = 1100;
-
-        app.stage.addChild(background);
+        LD.UI.toggleLayerButtonClicked = toggleLayerButtonClicked();
 
         var gridContainer = LD.Grid.initialize(13, 11, 11, 9, 64, 64);
+
         app.stage.addChild(gridContainer);
         app.stage.addChild(uiContainer);
         app.ticker.add(LD.update);
@@ -45,6 +50,8 @@
         setFood(30);
         setWater(40);
         setElectricity(50);
+        setWork(60);
+        setPeople(70);
     }
 
     function setCurrency(value) {
@@ -71,4 +78,29 @@
         electricity = value;
         LD.UI.setElectricity(value);
     }
+
+    function setWork(value) {
+        work = value;
+        LD.UI.setWork(value);
+    }
+
+    function setPeople(value) {
+        people = value;
+        LD.UI.setPeople(value);
+    }
+
+    function toggleLayerButtonClicked(){
+        var mustSwitchToUnderground = true;
+
+        return function(){
+            if(mustSwitchToUnderground) {
+                LD.Grid.switchToUnderground(app.stage);
+            }
+            else {
+                LD.Grid.switchToSurface(app.stage);
+            }
+
+            mustSwitchToUnderground = !mustSwitchToUnderground;
+        }
+    };
 }(window.LD = window.LD || {}));
