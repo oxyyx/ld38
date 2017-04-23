@@ -8,6 +8,8 @@
         var foodText;
         var waterText;
         var electricityText;
+        var workText;
+        var peopleText;
 
         var houseButton;
         var shopButton;
@@ -37,31 +39,33 @@
             foodText = createSidebarValue(uiContainer, 8, 82, 160, 32, 'img/food.png');
             waterText = createSidebarValue(uiContainer, 8, 120, 160, 32, 'img/water.png');
             electricityText = createSidebarValue(uiContainer, 8, 158, 160, 32, 'img/electricity.png');
+            workText = createSidebarValue(uiContainer, 8, 196, 160, 32, 'img/work.png');
+            peopleText = createSidebarValue(uiContainer, 8, 234, 160, 32, 'img/people.png');
 
             // Buildings
             var buildingsText = new PIXI.Text('BUILDINGS', { fontSize: 20, fill : 0x000000 }); 
             buildingsText.x = 35;
-            buildingsText.y = 200;
+            buildingsText.y = 270;
 
-            houseButton = createSidebarTile(uiContainer, 18, 230, 'house', 'img/house.png');
-            farmButton = createSidebarTile(uiContainer, 98, 230, 'farm', 'img/farmland.png');
-            industryButton = createSidebarTile(uiContainer, 18, 310, 'industry', 'img/industry.png');
-            shopButton = createSidebarTile(uiContainer, 98, 310, 'shop', 'img/shop.png');
+            houseButton = createSidebarTile(uiContainer, 18, 300, 'house', 'img/house.png');
+            farmButton = createSidebarTile(uiContainer, 98, 300, 'farm', 'img/farmland.png');
+            industryButton = createSidebarTile(uiContainer, 18, 380, 'industry', 'img/industry.png');
+            shopButton = createSidebarTile(uiContainer, 98, 380, 'shop', 'img/shop.png');
 
             uiContainer.addChild(buildingsText);
 
             // Transport
             var transportText = new PIXI.Text('TRANSPORT', { fontSize: 20, fill : 0x000000 }); 
             transportText.x = 30;
-            transportText.y = 400;
+            transportText.y = 450;
 
-            roadButton = createSidebarTile(uiContainer, 18, 430, 'road', 'img/road.png');
-            pipeButton = createSidebarTile(uiContainer, 98, 430, 'pipe', 'img/road.png');
-            powerCableButton = createSidebarTile(uiContainer, 18, 510, 'powercable', 'img/road.png');
+            roadButton = createSidebarTile(uiContainer, 18, 480, 'road', 'img/road.png');
+            pipeButton = createSidebarTile(uiContainer, 98, 480, 'pipe', 'img/road.png');
+            powerCableButton = createSidebarTile(uiContainer, 18, 560, 'powercable', 'img/road.png');
 
             uiContainer.addChild(transportText);
 
-            createToggleLayerButton(uiContainer, 'img/toggleLayerButton.png', 18, 590);
+            createToggleLayerButton(uiContainer, 'img/toggleLayerButton.png', 18, 640);
 
             return uiContainer;
         }
@@ -130,6 +134,14 @@
 
         UI.setElectricity = function setElectricity(value) {
             electricityText.text = value;
+        }
+
+        UI.setWork = function setWork(value) {
+            workText.text = value;
+        }
+
+        UI.setPeople = function setPeople(value) {
+            peopleText.text = value;
         }
     }(window.LD.UI = window.LD.UI || {}));
 }(window.LD = window.LD || {}));

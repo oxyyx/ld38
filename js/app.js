@@ -50,6 +50,8 @@
         setFood(30);
         setWater(40);
         setElectricity(50);
+        setWork(60);
+        setPeople(70);
     }
 
     function setCurrency(value) {
@@ -75,6 +77,16 @@
     function setElectricity(value) {
         electricity = value;
         LD.UI.setElectricity(value);
+    }
+
+    function setWork(value) {
+        work = value;
+        LD.UI.setWork(value);
+    }
+
+    function setPeople(value) {
+        people = value;
+        LD.UI.setPeople(value);
     }
 
     function toggleLayerButtonClicked(){
