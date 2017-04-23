@@ -17,6 +17,8 @@
         var roadButton;
         var pipeButton;
         var powerCableButton;
+
+        UI.toggleLayerButtonClicked = null;
         
         UI.initialize = function initializeUI(width, height) {
             uiContainer = new PIXI.Container();
@@ -59,6 +61,8 @@
 
             uiContainer.addChild(transportText);
 
+            createToggleLayerButton(uiContainer, 'img/toggleLayerButton.png', 18, 590);
+
             return uiContainer;
         }
 
@@ -86,7 +90,7 @@
             var tileButton = PIXI.Sprite.fromImage(icon);
             tileButton.interactive = true;
             tileButton.buttonMode = true;
-            tileButton.on('pointerup', function() { LD.setActiveTile(id, tileButton.texture); })
+            tileButton.on('pointerup', function() { LD.setActiveTile(id, tileButton.texture); });
 
             tileButton.x = x;
             tileButton.y = y;
@@ -94,6 +98,18 @@
             container.addChild(tileButton);
 
             return tileButton;
+        }
+
+        function createToggleLayerButton(container, icon, x, y){
+            var button = PIXI.Sprite.fromImage(icon);
+            button.interactive = true;
+            button.buttonMode = true;
+            button.on('pointerup', function(){UI.toggleLayerButtonClicked();});
+
+            button.x = x;
+            button.y = y;
+
+            container.addChild(button);
         }
 
         UI.setCurrency = function setCurrency(value) {

@@ -29,8 +29,10 @@
         
         uiContainer = LD.UI.initialize(180, 720);
         uiContainer.x = 1100;
+        LD.UI.toggleLayerButtonClicked = toggleLayerButtonClicked();
 
         var gridContainer = LD.Grid.initialize(13, 11, 11, 9, 64, 64);
+
         app.stage.addChild(gridContainer);
         app.stage.addChild(uiContainer);
         app.ticker.add(LD.update);
@@ -75,16 +77,18 @@
         LD.UI.setElectricity(value);
     }
 
-    var mustSwitchToUnderground = true;
-    window.addEventListener('keydown', function(){
-        console.log("key down!s");
-        if(mustSwitchToUnderground) {
-             LD.Grid.switchToUnderground(app.stage);
-        }
-        else {
-            LD.Grid.switchToSurface(app.stage);
-        }
+    function toggleLayerButtonClicked(){
+        var mustSwitchToUnderground = true;
 
-        mustSwitchToUnderground = !mustSwitchToUnderground;
-    })
+        return function(){
+            if(mustSwitchToUnderground) {
+                LD.Grid.switchToUnderground(app.stage);
+            }
+            else {
+                LD.Grid.switchToSurface(app.stage);
+            }
+
+            mustSwitchToUnderground = !mustSwitchToUnderground;
+        }
+    };
 }(window.LD = window.LD || {}));
