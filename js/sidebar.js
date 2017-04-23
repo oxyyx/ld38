@@ -19,12 +19,20 @@
         var pipeButton;
         var powerCableButton;
 
+        var sideBarTextStyle;
+
         UI.toggleLayerButtonClicked = null;
         
         UI.initialize = function initializeUI(width, height) {
             uiContainer = new PIXI.Container();
             uiContainer.width = width;
             uiContainer.height = height;
+
+            sideBarTextStyle = new PIXI.TextStyle({
+                fontFamily: 'Courier New',
+                fontSize: 20,
+                fill: ['#ffffff']
+            });
 
             // Currencies & values 
             currencyText = createSidebarValue(uiContainer, 8, 6, 160, 32, 'img/money.png');
@@ -36,45 +44,65 @@
             peopleText = createSidebarValue(uiContainer, 8, 234, 160, 32, 'img/people.png');
 
             // Buildings
-            var buildingsText = new PIXI.Text('BUILDINGS', { fontSize: 20, fill : 0x000000 }); 
+            var buildingBackground = new PIXI.Graphics();
+            buildingBackground.beginFill(0x888888);
+            buildingBackground.drawRect(8, 270, 160, 180);
+
+            var buildingHeaderBackground = new PIXI.Graphics();
+            buildingHeaderBackground.beginFill(0x333333);
+            buildingHeaderBackground.drawRect(8, 270, 160, 24);
+
+            var buildingsText = new PIXI.Text('BUILDINGS', sideBarTextStyle); 
             buildingsText.x = 35;
-            buildingsText.y = 270;
+            buildingsText.y = 272;
+
+            uiContainer.addChild(buildingBackground);
+            uiContainer.addChild(buildingHeaderBackground);
+            uiContainer.addChild(buildingsText);
 
             houseButton = createSidebarTile(uiContainer, 18, 300, 'house', 'img/house.png');
             farmButton = createSidebarTile(uiContainer, 98, 300, 'farm', 'img/farmland.png');
             industryButton = createSidebarTile(uiContainer, 18, 380, 'industry', 'img/industry.png');
             shopButton = createSidebarTile(uiContainer, 98, 380, 'shop', 'img/shop.png');
 
-            uiContainer.addChild(buildingsText);
-
             // Transport
-            var transportText = new PIXI.Text('TRANSPORT', { fontSize: 20, fill : 0x000000 }); 
+            var transportBackground = new PIXI.Graphics();
+            transportBackground.beginFill(0x888888);
+            transportBackground.drawRect(8, 455, 160, 180);
+
+            var transportHeaderBackground = new PIXI.Graphics();
+            transportHeaderBackground.beginFill(0x333333);
+            transportHeaderBackground.drawRect(8, 455, 160, 24);
+
+            var transportText = new PIXI.Text('TRANSPORT', sideBarTextStyle); 
             transportText.x = 30;
-            transportText.y = 450;
+            transportText.y = 457;
 
-            roadButton = createSidebarTile(uiContainer, 18, 480, 'road', 'img/road.png');
-            pipeButton = createSidebarTile(uiContainer, 98, 480, 'pipe', 'img/pipeline.png');
-            powerCableButton = createSidebarTile(uiContainer, 18, 560, 'powercable', 'img/powercable.png');
-
+            uiContainer.addChild(transportBackground);
+            uiContainer.addChild(transportHeaderBackground);
             uiContainer.addChild(transportText);
 
-            createToggleLayerButton(uiContainer, 'img/toggleLayerButton.png', 18, 640);
+            roadButton = createSidebarTile(uiContainer, 18, 485, 'road', 'img/road.png');
+            pipeButton = createSidebarTile(uiContainer, 98, 485, 'pipe', 'img/pipeline.png');
+            powerCableButton = createSidebarTile(uiContainer, 18, 565, 'powercable', 'img/powercable.png');
+
+            createToggleLayerButton(uiContainer, 'img/toggleLayerButton.png', 8, 645);
 
             return uiContainer;
         }
 
         function createSidebarValue(container, x, y, width, height, icon) {
             var valueBackground = new PIXI.Graphics();
-            valueBackground.beginFill(0x666666);
+            valueBackground.beginFill(0x888888);
             valueBackground.drawRect(x + 8, y + 2, width - 8, height - 4);
 
             var valueIcon = PIXI.Sprite.fromImage(icon);
             valueIcon.x = x
             valueIcon.y = y;
 
-            var valueText = new PIXI.Text(0, { fontSize: 20, fill : 0xFFFFFF});
+            var valueText = new PIXI.Text(0, sideBarTextStyle);
             valueText.x = x + 40;
-            valueText.y = y + 4;
+            valueText.y = y + 6;
 
             container.addChild(valueBackground);
             container.addChild(valueIcon);

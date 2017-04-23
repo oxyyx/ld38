@@ -26,6 +26,7 @@
     LD.initialize = function initialize() {
         app = new PIXI.Application(1280, 720, {backgroundColor : 0x9FD4E3});
 
+
         gameworkContainer = document.getElementById('canvas-container');
 		gameworkContainer.appendChild(app.view);
         
