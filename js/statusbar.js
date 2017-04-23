@@ -24,7 +24,7 @@
             }
 
             StatusBar.setActiveBuilding = function setActiveBuilding(building) {
-                activeBuilding = building;
+                activeBuildingSprite.texture = building.texture;
                 activeBuildingSprite.alpha = 255;
             }
 

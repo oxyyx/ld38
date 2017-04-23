@@ -41,7 +41,7 @@
 
         LD.addEventListener('keyup_esc', function(event) {
             LD.UI.StatusBar.clearActiveBuilding();
-            LD.setActiveTile(null, null);
+            LD.setActiveTile(null);
         });
 
         app.stage.addChild(gridContainer);
@@ -55,8 +55,11 @@
 
     LD.activeTileConstructor = null;
 
-    LD.setActiveTile = function setActiveTile(id, texture) {
-        LD.activeTile = {id: id, texture: texture};
+    LD.setActiveTile = function setActiveTile(id) {
+        var newActiveTile = LD.TileStorage.buildingConstructors[id];
+        LD.activeTileConstructor = newActiveTile;
+
+        LD.UI.StatusBar.clearActiveBuilding();
     }
 
     LD.update = function update(delta) {
