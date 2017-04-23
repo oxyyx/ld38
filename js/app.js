@@ -2,8 +2,10 @@
     var app = null;
     var gameworkContainer;
     var uiContainer;
+    var statusBarContainer;
     var backgroundFilter;
 
+    var eventListeners = {};
 
     var currency = 10000;
     var technology = 0;
@@ -29,12 +31,25 @@
         
         uiContainer = LD.UI.initialize(180, 720);
         uiContainer.x = 1100;
+
+        statusBarContainer = LD.UI.StatusBar.initialize(200, 200);
+        statusBarContainer.x = 900;
+
         LD.UI.toggleLayerButtonClicked = toggleLayerButtonClicked();
 
         var gridContainer = LD.Grid.initialize(13, 11, 11, 9, 64, 64);
 
+        LD.addEventListener('keyup_esc', function(event) {
+            LD.UI.StatusBar.clearActiveBuilding();
+            LD.setActiveTile(null, null);
+        });
+
         app.stage.addChild(gridContainer);
         app.stage.addChild(uiContainer);
+        app.stage.addChild(statusBarContainer);
+
+        LD.Input.Keyboard.initialize();
+
         app.ticker.add(LD.update);
     }
 
@@ -52,6 +67,24 @@
         setElectricity(50);
         setWork(60);
         setPeople(70);
+    }
+
+    LD.addEventListener = function addEventListener(eventName, eventHandler) {
+        if (!eventListeners.hasOwnProperty(eventName)) { 
+            eventListeners[eventName] = [];
+        }
+
+        eventListeners[eventName].push(eventHandler);
+    }
+
+    LD.notify = function notify(eventName, event) {
+        if (!eventListeners.hasOwnProperty(eventName)) { 
+            return; 
+        }
+
+        for (var i = 0; i < eventListeners[eventName].length; i++) {
+            eventListeners[eventName][i](event);
+        }
     }
 
     function setCurrency(value) {
