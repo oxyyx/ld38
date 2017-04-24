@@ -186,11 +186,17 @@
     }
 
     function isGameWon(tiles) {
+        var populationCapacity = tiles.reduce(
+            function(acc, val){
+                return acc + val.getCurrentPopulationCapacity();
+            },
+         0);
+
         var maxLevelHouses = tiles.filter(function(value) {
             return value.id == 'house' && value.level == value.maxLevel;
         });
 
-        if (maxLevelHouses.length == LD.Grid.getAmountOfPlayableTiles()) {
+        if (maxLevelHouses.length == LD.Grid.getAmountOfPlayableTiles() && currentPopulation == populationCapacity) {
             return true;
         }
 
