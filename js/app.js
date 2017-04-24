@@ -57,7 +57,7 @@
                     setCurrency(currency - tile.initialCost);
                 }
             }
-            else{    
+            else if(!args.tile.isDefaultTile){    
                 LD.UI.StatusBar.setActiveBuilding(args.tile);
             }
         });

@@ -93,10 +93,12 @@
                 
                 if(x >= playableArea.xStart && x < playableArea.xStart + playableArea.width && y >= playableArea.yStart && y < playableArea.yStart + playableArea.height){
                     surfaceTiles[tileIndex] = new PassiveTile();
+                    surfaceTiles[tileIndex].isDefaultTile = true;
                     surfaceSpriteContainer.addChildAt(createSpriteAtPosition('passiveDirt', x, y), tileIndex);
                 }
                 else{
                     surfaceTiles[tileIndex] = new PassiveTile();
+                    surfaceTiles[tileIndex].isDefaultTile = true;
                     surfaceSpriteContainer.addChildAt(createSpriteAtPosition('passiveGrass', x, y), tileIndex);
                 }        
             }
@@ -109,6 +111,7 @@
                 var tileIndex = getTileIndex(x, y);
 
                 undergroundTiles[tileIndex] = new PassiveTile();
+                surfaceTiles[tileIndex].isDefaultTile = true;
                 undergroundSpriteContainer.addChildAt(createSpriteAtPosition('passiveDirt', x, y), tileIndex);
             }
         }
