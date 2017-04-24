@@ -74,6 +74,7 @@
             roadButton = createSidebarTile(uiContainer, 18, 485, 'road', 'img/road.png');
             pipeButton = createSidebarTile(uiContainer, 98, 485, 'pipe', 'img/pipeline.png');
             powerCableButton = createSidebarTile(uiContainer, 18, 565, 'powercable', 'img/powercable.png');
+            powerCableButton = createSidebarTile(uiContainer, 98, 565, 'powerwatercable', 'img/powerWaterCable.png');
 
             createToggleLayerButton(uiContainer, 'img/toggleLayerButton.png', 8, 645);
 

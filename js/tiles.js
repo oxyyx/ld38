@@ -123,6 +123,17 @@ function Powerline(){
 }
 Powerline.prototype = Tile.prototype;
 
+function PowerWaterline(){
+    this.id = 'powerwatercable';
+    this.initialCost = 300;
+    this.maintenanceCost = 40;
+    this.isUnderground = true;
+    this.baseElectricityProvided = 10;
+    this.baseWaterProvided = 10;
+    this.texture = PIXI.Texture.fromImage('img/powerWaterCable.png');
+}
+PowerWaterline.prototype = Tile.prototype;
+
 function PassiveTile(){
     this.id = 'passive';
     this.getCurrentIncome = function(){ return 0; }
@@ -140,4 +151,5 @@ PassiveTile.prototype = Tile.prototype;
     TileStorage.buildingConstructors[new Road().id] = Road;
     TileStorage.buildingConstructors[new Pipeline().id] = Pipeline;
     TileStorage.buildingConstructors[new Powerline().id] = Powerline;
+    TileStorage.buildingConstructors[new PowerWaterline().id] = PowerWaterline;
 })(window.LD.TileStorage = window.LD.TileStorage || {});
