@@ -72,14 +72,19 @@
                     overUpgradeButton = true;                    
                     tooltipBackground.visible = true;
                     
-                    var localPosition = upgradeButton.toLocal({x: args.data.originalEvent.clientX - 80, y: args.data.originalEvent.clientY - 180});    
+                    var localPosition = args.data.getLocalPosition(upgradeButton);
+                    localPosition.x += 10;
+                    localPosition.y -= upgradeCostTooltipText.height + 10;
                     tooltipBackground.redraw(localPosition);
                 });
                 upgradeButton.on('pointermove', function(args){
                     if(!overUpgradeButton){
                         return;
                     }
-                    var localPosition = upgradeButton.toLocal({x: args.data.originalEvent.clientX - 80, y: args.data.originalEvent.clientY - 180});
+
+                    var localPosition = args.data.getLocalPosition(upgradeButton);
+                    localPosition.x += 10;
+                    localPosition.y -= upgradeCostTooltipText.height + 10;
                     tooltipBackground.redraw(localPosition);
                 });
                 upgradeButton.on('pointerout', function(args){
@@ -94,7 +99,6 @@
                 });
 
                 var tooltipBackground = new PIXI.Graphics();
-                tooltipBackground.beginFill(0x333333);
                 tooltipBackground.visible = false;
                 tooltipBackground.redraw = function(coordinates){
                     upgradeCostTooltipText.text = "$" + activeBuilding.getCurrentUpgradeCost().formatCustom(0, '.', ',');
@@ -104,6 +108,7 @@
                         tooltipBackground.y = coordinates.y;
                     }
                     tooltipBackground.clear();
+                    tooltipBackground.beginFill(0x333333, 0.75);
                     tooltipBackground.drawRect(0, 0, upgradeCostTooltipText.width + 16, upgradeCostTooltipText.height + 16);                    
                 }
                 upgradeCostTooltipText = new PIXI.Text('', tooltipTextStyle);

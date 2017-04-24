@@ -99,6 +99,7 @@
                     tooltipBackground.y = coordinates.y;
                 }
                 tooltipBackground.clear();
+                tooltipBackground.beginFill(0x333333, 0.75);
                 tooltipBackground.drawRect(0, 0, initialCostTooltipText.width + 16, initialCostTooltipText.height + 16);                    
             }
 
@@ -140,14 +141,18 @@
                 overTileButton = true;                    
                 tooltipBackground.visible = true;
                 
-                var localPosition = tileButton.toLocal({x: args.data.originalEvent.clientX - 80, y: args.data.originalEvent.clientY - 180});    
+                var localPosition = args.data.getLocalPosition(tileButton);
+                localPosition.x += 10;
+                localPosition.y -= initialCostTooltipText.height + 10;
                 tooltipBackground.redraw(localPosition, tileInitialCost);
             });
             tileButton.on('pointermove', function(args){
                 if(!overTileButton){
                     return;
                 }
-                var localPosition = tileButton.toLocal({x: args.data.originalEvent.clientX - 80, y: args.data.originalEvent.clientY - 180});
+                var localPosition = args.data.getLocalPosition(tileButton);
+                localPosition.x += 10;
+                localPosition.y -= initialCostTooltipText.height + 10;
                 tooltipBackground.redraw(localPosition, tileInitialCost);
             });
             tileButton.on('pointerout', function(args){
