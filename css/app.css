@@ -42,6 +42,7 @@ body {
     border: 2px #999999 solid;
 
     color: black;
+    margin-bottom: 100px;
 }
 
 #canvas-container {
