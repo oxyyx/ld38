@@ -211,6 +211,10 @@
     }
 
     function checkCanPlaceTile(activeTile, x, y){
+        if(activeTile.id == activeTiles[getTileIndex(x, y)].id){
+            return false;
+        }
+
         var undergroundAndCanBePlaced = activeTile.isUnderground && activeSpriteContainer == undergroundSpriteContainer && activeTiles == undergroundTiles;
         var surfaceAndCanbePlaced = !activeTile.isUnderground && activeSpriteContainer == surfaceSpriteContainer && activeTiles == surfaceTiles;
 
