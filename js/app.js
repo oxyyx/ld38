@@ -190,9 +190,6 @@
             return value.id == 'house' && value.level == value.maxLevel;
         });
 
-        console.log(maxLevelHouses.length);
-        console.log(LD.Grid.getAmountOfPlayableTiles());
-
         if (maxLevelHouses.length == LD.Grid.getAmountOfPlayableTiles()) {
             return true;
         }
