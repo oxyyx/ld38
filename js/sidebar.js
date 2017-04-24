@@ -20,8 +20,6 @@
         var powerCableButton;
 
         var sideBarTextStyle;
-
-        UI.toggleLayerButtonClicked = null;
         
         UI.initialize = function initializeUI(width, height) {
             uiContainer = new PIXI.Container();
@@ -120,7 +118,7 @@
             var button = PIXI.Sprite.fromImage(icon);
             button.interactive = true;
             button.buttonMode = true;
-            button.on('pointerup', function(){UI.toggleLayerButtonClicked();});
+            button.on('pointerup', () => LD.notify('toggleLayerButtonClicked'));
 
             button.x = x;
             button.y = y;

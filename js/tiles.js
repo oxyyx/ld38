@@ -11,11 +11,11 @@ Tile.prototype.hasWater = false;
 Tile.prototype.hasElectricity = false;
 Tile.prototype.hasRoad = false;
 Tile.prototype.isDefaultTile = false;
-Tile.prototype.populationCapacity = 0;
-Tile.prototype.foodProduction = 0;
-Tile.prototype.jobsProvided = 0;
-Tile.prototype.waterProvided = 0;
-Tile.prototype.electricityProvided = 0;
+Tile.prototype.basePopulationCapacity = 0;
+Tile.prototype.baseFoodProduction = 0;
+Tile.prototype.baseJobsProvided = 0;
+Tile.prototype.baseWaterProvided = 0;
+Tile.prototype.baseElectricityProvided = 0;
 Tile.prototype.getCurrentUpgradeCost = function getCurrentUpgradeCost(){
     return (this.initialCost + (200 * this.level)) + 200;
 }
@@ -33,13 +33,32 @@ Tile.prototype.getCurrentCost = function getCurrentCost(){
 
     return (0.5 * this.level * 35) / ( 0.5 * this.level + 2.5) + this.maintenanceCost;
 }
+Tile.prototype.getCurrentJobsProvided = function getCurrentJobsProvided(){
+    return this.baseJobsProvided * (this.level + 1);
+}
+
+Tile.prototype.getCurrentFoodProduced = function getCurrentFoodProduced(){
+    return this.baseFoodProduction * (this.level + 1);
+}
+
+Tile.prototype.getCurrentWaterProvided = function getCurrentWaterProvided(){
+    return this.baseWaterProvided * (this.level + 1);
+}
+
+Tile.prototype.getCurrentElectricityProvided = function getCurrentElectricityProvided(){
+    return this.baseElectricityProvided * (this.level + 1);
+}
+
+Tile.prototype.getCurrentPopulationCapacity = function getCurrentPopulationCapacity(){
+    return this.basePopulationCapacity * (this.level + 1);
+}
 
 function House(){
     this.id = 'house';
     this.baseIncome = 5;
     this.initialCost = 100;
     this.texture = PIXI.Texture.fromImage('img/house.png');
-    this.populationCapacity = 10;
+    this.basePopulationCapacity = 10;
 
     switch(getRandomInt(1, 3)) {
         case 1: this.name = 'The Garfields'; break;
@@ -52,7 +71,7 @@ House.prototype = Tile.prototype;
 function Industry(){
     this.id = 'industry';
     this.initialCost = 100;
-    this.jobsProvided = 10;
+    this.baseJobsProvided = 10;
     this.texture = PIXI.Texture.fromImage('img/industry.png');
     this.name = 'Industry';
 }
@@ -61,7 +80,7 @@ Industry.prototype = Tile.prototype;
 function ShopEntertainment(){
     this.id = 'shop';
     this.initialCost = 100;
-    this.jobsProvided = 5;
+    this.baseJobsProvided = 5;
     this.texture = PIXI.Texture.fromImage('img/shop.png');
     this.name = 'Shop';
 }
@@ -70,7 +89,7 @@ ShopEntertainment.prototype = Tile.prototype;
 function Farm(){
     this.id = 'farm';
     this.initialCost = 100;
-    this.foodProduction = 10;
+    this.baseFoodProduction = 10;
     this.texture = PIXI.Texture.fromImage('img/farmland.png');
     this.name = 'Farm';
 }
@@ -89,7 +108,7 @@ function Pipeline(){
     this.initialCost = 100;
     this.maintenanceCost = 20 ;
     this.isUnderground = true;
-    this.waterProvided = 10;
+    this.baseWaterProvided = 10;
     this.texture = PIXI.Texture.fromImage('img/pipeline.png');
 }
 Pipeline.prototype = Tile.prototype;
@@ -99,7 +118,7 @@ function Powerline(){
     this.initialCost = 100;
     this.maintenanceCost = 20;
     this.isUnderground = true;
-    this.electricityProvided = 10;
+    this.baseElectricityProvided = 10;
     this.texture = PIXI.Texture.fromImage('img/powercable.png');
 }
 Powerline.prototype = Tile.prototype;

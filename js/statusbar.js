@@ -56,8 +56,9 @@
                 upgradeButton.interactive = true;
                 upgradeButton.buttonMode = true;
                 upgradeButton.on('pointerup', function() { 
-                    if (activeBuilding) {
-                        activeBuilding.level++;
+                    if (activeBuilding) {                        
+                        LD.notify('upgradeTileButtonClicked', activeBuilding);
+
                         setBuildingLevelDisplay(activeBuilding.level);
                     }
                 });

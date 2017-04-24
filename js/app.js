@@ -18,6 +18,8 @@
     var milisecondsCounter = 0;
     const updateEveryMS = 250;
 
+    LD.activeTileConstructor = null;
+
     LD.initialize = function initialize() {
         app = new PIXI.Application(1280, 720, {backgroundColor : 0x9FD4E3});
 
@@ -30,8 +32,6 @@
         statusBarContainer = LD.UI.StatusBar.initialize(160, 180);
         statusBarContainer.x = 940;
         statusBarContainer.y = 10;
-
-        LD.UI.toggleLayerButtonClicked = toggleLayerButtonClicked();
 
         var gridContainer = LD.Grid.initialize(13, 11, 11, 9, 64, 64);
 
@@ -46,24 +46,29 @@
 
         LD.Input.Keyboard.initialize();
 
-        LD.Grid.onTileClicked = function onTileClicked(building, x, y) {
+        LD.addEventListener('tileClicked', function onTileClicked(args) {
             if(LD.activeTileConstructor != null){
                 var tile = new LD.activeTileConstructor();
-                var hasPlacedTile = LD.Grid.tryPlaceTile(tile, x, y);
+                var hasPlacedTile = LD.Grid.tryPlaceTile(tile, args.x, args.y);
 
                 if(hasPlacedTile){
                     setCurrency(currency - tile.initialCost);
                 }
             }
             else{    
-                LD.UI.StatusBar.setActiveBuilding(building);
+                LD.UI.StatusBar.setActiveBuilding(args.tile);
             }
-        };
+        });
+
+        LD.addEventListener('upgradeTileButtonClicked', function(buildingToUpgrade){
+            buildingToUpgrade.level++;
+            setCurrency(currency - buildingToUpgrade.getCurrentUpgradeCost());
+        });
+
+        LD.addEventListener('toggleLayerButtonClicked', toggleLayerButtonClicked());
 
         app.ticker.add(LD.update);
     }
-
-    LD.activeTileConstructor = null;
 
     LD.setActiveTile = function setActiveTile(id) {
         var newActiveTile = LD.TileStorage.buildingConstructors[id];
@@ -126,7 +131,7 @@
                     return acc;
                 }
 
-                return acc + val.waterProvided;
+                return acc + val.getCurrentWaterProvided();
             },
         0);
 
@@ -140,7 +145,7 @@
                     return acc;
                 }
 
-                return acc + val.electricityProvided;
+                return acc + val.getCurrentElectricityProvided();
             },
         0);
 
@@ -150,7 +155,7 @@
     function updatePopulation(tiles){
         var populationCapacity = tiles.reduce(
             function(acc, val){
-                return acc + val.populationCapacity;
+                return acc + val.getCurrentPopulationCapacity();
             },
          0);
 
@@ -185,7 +190,7 @@
     function updateFood(tiles){
         var foodProduction = tiles.reduce(
             function(acc, val){
-                return acc + val.foodProduction;
+                return acc + val.getCurrentFoodProduced();
             },
         0);
 
@@ -195,7 +200,7 @@
     function updateJobs(tiles){
         var jobs = tiles.reduce(
             function(acc, val){
-                return acc + val.jobsProvided;
+                return acc + val.getCurrentJobsProvided();
             },
         0);
 

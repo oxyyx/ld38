@@ -15,8 +15,6 @@
     var pipelineConnection = null;
     var electricityConnection = null;
     var defaultConnectionTiles = null;
-
-    Grid.onTileClicked = null;
     
     Grid.initialize = function initialize(totalWidth, totalHeight, playableWidth, playableHeight, pTileWidth, pTileHeight){
         gridWidth = totalWidth;
@@ -30,8 +28,8 @@
         tileWidth = pTileWidth;
         tileHeight = pTileHeight;
         
-        initializeTileData('img/grass.png', 'default');
-        initializeTileData('img/dirt.png', 'special');
+        initializeTileData('img/grass.png', 'passiveGrass');
+        initializeTileData('img/dirt.png', 'passiveDirt');
         initializeTileData('img/pipeline.png', 'pipeline');
         initializeTileData('img/powercable.png', 'powercable');
         initializeTileData('img/road.png', 'road');
@@ -94,11 +92,11 @@
                 
                 if(x >= playableArea.xStart && x < playableArea.xStart + playableArea.width && y >= playableArea.yStart && y < playableArea.yStart + playableArea.height){
                     surfaceTiles[tileIndex] = new PassiveTile();
-                    surfaceSpriteContainer.addChildAt(createSpriteAtPosition('special', x, y), tileIndex);
+                    surfaceSpriteContainer.addChildAt(createSpriteAtPosition('passiveDirt', x, y), tileIndex);
                 }
                 else{
                     surfaceTiles[tileIndex] = new PassiveTile();
-                    surfaceSpriteContainer.addChildAt(createSpriteAtPosition('default', x, y), tileIndex);
+                    surfaceSpriteContainer.addChildAt(createSpriteAtPosition('passiveGrass', x, y), tileIndex);
                 }        
             }
         }
@@ -108,15 +106,9 @@
         for(var y = 0; y < gridHeight; y++){
             for(var x = 0; x < gridWidth; x++){
                 var tileIndex = getTileIndex(x, y);
-                
-                if(x >= playableArea.xStart && x < playableArea.xStart + playableArea.width && y >= playableArea.yStart && y < playableArea.yStart + playableArea.height){
-                    undergroundTiles[tileIndex] = new PassiveTile();
-                    undergroundSpriteContainer.addChildAt(createSpriteAtPosition('default', x, y), tileIndex);
-                }
-                else{
-                    undergroundTiles[tileIndex] = new PassiveTile();
-                    undergroundSpriteContainer.addChildAt(createSpriteAtPosition('default', x, y), tileIndex);
-                }
+
+                undergroundTiles[tileIndex] = new PassiveTile();
+                undergroundSpriteContainer.addChildAt(createSpriteAtPosition('passiveDirt', x, y), tileIndex);
             }
         }
         
@@ -208,9 +200,7 @@
         }
         
         function onTileClicked(){
-            if(LD.Grid.onTileClicked != null){
-                LD.Grid.onTileClicked(activeTiles[getTileIndex(x, y)], x, y);
-            }
+            LD.notify('tileClicked', {tile: activeTiles[getTileIndex(x, y)], x: x, y: y});
         }
         
         return sprite;
