@@ -1,5 +1,7 @@
 (function(LD) {
     var app = null;
+    var backgroundMusic;
+
     var gameworkContainer;
     var uiContainer;
     var statusBarContainer;
@@ -22,6 +24,14 @@
 
     LD.initialize = function initialize() {
         app = new PIXI.Application(1280, 720, {backgroundColor : 0x9FD4E3});
+
+        backgroundMusic = new Howl({
+            src: ['audio/bg-music.mp3', 'audio/bg-music.wav'],
+            autoplay: true,
+            loop: true,
+            volume: 0.8,
+            rate: 1.0
+        });
 
         gameworkContainer = document.getElementById('canvas-container');
 		gameworkContainer.appendChild(app.view);
