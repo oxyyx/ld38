@@ -16,7 +16,7 @@
     var electricityConnection = null;
     var defaultConnectionTiles = null;
 
-    Grid.onTileSelected = null;
+    Grid.onTileClicked = null;
     
     Grid.initialize = function initialize(totalWidth, totalHeight, playableWidth, playableHeight, pTileWidth, pTileHeight){
         gridWidth = totalWidth;
@@ -73,6 +73,18 @@
     
     Grid.getTiles = function getTiles(){
         return surfaceTiles.concat(undergroundTiles);
+    }
+
+    Grid.tryPlaceTile = function tryPlaceTile(tile, x, y){  
+        var canPlace = checkCanPlaceTile(tile, x, y);
+
+        if(canPlace){
+            var tileIndex = getTileIndex(x, y);
+            activeSpriteContainer.children[tileIndex].texture = tile.texture;
+            activeTiles[tileIndex] = tile;
+        }
+
+        return canPlace;
     }
     
     function intitializeSurfaceTiles(){
@@ -196,20 +208,8 @@
         }
         
         function onTileClicked(){
-            if(LD.activeTileConstructor != null){
-                var activeTile = new LD.activeTileConstructor();            
-                var canPlace = checkCanPlaceTile(activeTile, x, y);
-
-                if(canPlace){
-                    var tileIndex = getTileIndex(x, y);
-                    activeSpriteContainer.children[tileIndex].texture = activeTile.texture;
-                    activeTiles[tileIndex] = activeTile;
-                }
-            }
-            else{
-                if(LD.Grid.onTileSelected){
-                    LD.Grid.onTileSelected(activeTiles[getTileIndex(x, y)]);
-                }
+            if(LD.Grid.onTileClicked != null){
+                LD.Grid.onTileClicked(activeTiles[getTileIndex(x, y)], x, y);
             }
         }
         
