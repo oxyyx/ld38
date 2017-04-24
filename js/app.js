@@ -27,8 +27,9 @@
         uiContainer = LD.UI.initialize(180, 720);
         uiContainer.x = 1100;
 
-        statusBarContainer = LD.UI.StatusBar.initialize(200, 200);
-        statusBarContainer.x = 900;
+        statusBarContainer = LD.UI.StatusBar.initialize(160, 180);
+        statusBarContainer.x = 940;
+        statusBarContainer.y = 10;
 
         LD.UI.toggleLayerButtonClicked = toggleLayerButtonClicked();
 
@@ -44,6 +45,10 @@
         app.stage.addChild(statusBarContainer);
 
         LD.Input.Keyboard.initialize();
+
+        LD.Grid.onTileSelected = function onTileSelected(building) {
+            LD.UI.StatusBar.setActiveBuilding(building);
+        };
 
         app.ticker.add(LD.update);
     }
