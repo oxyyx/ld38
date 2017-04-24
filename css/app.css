@@ -29,6 +29,20 @@ body {
 	text-shadow: 0 2px 0 #000000;
 }
 
+.info{
+    box-sizing: border-box;
+    padding: 15px;
+    width: 1280px;
+	text-align: left;
+	font-family: monospace;
+	font-size: 20px;
+    margin-top: 20px;
+
+    background: #999999;
+
+    color: black;
+}
+
 #canvas-container {
 	width: 1280px;
 }

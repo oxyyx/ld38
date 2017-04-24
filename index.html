@@ -4,13 +4,54 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>LD38 - 11x11</title>
+	<title>LD38 - 13x11</title>
 	<link rel="stylesheet" href="css/app.css">
 </head>
 <body>
     <div class="container">
 		<div class="header">LD38 - "A Small World" - SIGILL & OxySocks</div>
         <div id="canvas-container"></div>
+		<div class="info">
+			<p>
+				<b>CONTROLS:</b></br>
+				<b>Left mouse button:</b> To click on buttons</br>
+				<b>ESCAPE:</b> Cancel building mode
+			</p>
+			</br>
+			<p>
+			The game '13x11' is a city builder in which you can build houses, farms, industry and shops.
+			<ul>
+			<li><b>Houses</b> provide a place for your citizens to live in. They will increase the population capacity and generate income.</li>
+			<li><b>Farms</b> provide food for your citizens. Every citizen consumes 1 food.</li>
+			<li><b>Industry</b> provide jobs for your citizens. Every citizen needs a job.</li>
+			<li><b>Shops</b> also provide jobs for your citizens, although it provided less jobs than industry.</li>
+			</ul>
+			</p>
+			<p>
+			It is also possible to build <b>roads</b>, although these do not provide any benefits. They DO however cost maintanence!
+			</p>
+			<p>
+			On the underground layer (click the 'switch layer' button) you can build the following structures:
+			<ul>
+			<li><b>Pipelines</b> provide water to your city. Currently only the amount of pipelines matters, their placement does not.</li>
+			<li><b>Electricity cables</b> provides electricity to your city. Currently only the amount of cables matters, their placement does not.</li>
+			<li><b>Pipeline/electricity cable combos</b> provides both water and electricity to your city. As with the normal pipelines and cables, only the amount matters, not the placement.</li>
+			</ul>
+			</p>
+
+			<p>
+			The roads, pipelines and electricity cables have to be build on tiles adjacent to existing roads, pipelines and electricity cables.</br>
+			The first pipeline/electricty cables combo has to be build on a tile that is adjacent to both a pipeline and an electricity cable.
+			</p>
+			<p>
+				Buildings can be upgraded by making sure your 'building selection' is canceled by pressing ESCAPE and then clicking an existing building. This will show an upgrade button. Upgraded buildings will provide better output of the resource/income they generate.
+			</p>
+
+			<p>
+			The goal of the game is to have every tile on the surface covered by a level 5 house.</br>
+			The game is over if you have reached a debt of $-10,000.
+			</p>
+		</div>
     </div>
 
 	<script src="lib/pixi.js"></script>
