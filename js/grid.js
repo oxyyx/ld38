@@ -222,10 +222,13 @@
             return checkHasConnectionOfType(activeTile, x, y);
         }
         else if(activeTile.id == 'pipe'){
-            return checkHasConnectionOfType(activeTile, x, y);
+            return checkHasConnectionOfType(activeTile, x, y) || checkHasConnectionOfType({ id: 'powerwatercable'}, x, y);
         }
         else if(activeTile.id == 'powercable'){
-            return checkHasConnectionOfType(activeTile, x, y);
+            return checkHasConnectionOfType(activeTile, x, y) || checkHasConnectionOfType({ id: 'powerwatercable'}, x, y);
+        }
+        else if(activeTile.id == 'powerwatercable'){
+            return (checkHasConnectionOfType({ id: 'pipe'}, x, y) && checkHasConnectionOfType({ id: 'powercable'}, x, y)) || checkHasConnectionOfType({ id: 'powerwatercable'}, x, y);
         }
 
         return true;
