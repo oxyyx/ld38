@@ -48,25 +48,26 @@
         activeSpriteContainer = surfaceSpriteContainer;
         activeTiles = surfaceTiles;
         
-        return surfaceSpriteContainer;
+        surfaceSpriteContainer.visible = true;
+        undergroundSpriteContainer.visible = false;
+
+        return [surfaceSpriteContainer, undergroundSpriteContainer];
     }
     
-    Grid.switchToUnderground = function switchToUnderground(stage){
+    Grid.switchToUnderground = function switchToUnderground(){
         activeSpriteContainer = undergroundSpriteContainer;
         activeTiles = undergroundTiles;
         
-        var surfaceSpriteContainerStageIndex = stage.getChildIndex(surfaceSpriteContainer);
-        stage.removeChild(surfaceSpriteContainer);
-        stage.addChildAt(undergroundSpriteContainer, surfaceSpriteContainerStageIndex);
+        surfaceSpriteContainer.visible = false;
+        undergroundSpriteContainer.visible = true;
     }
     
-    Grid.switchToSurface = function switchToSurface(stage){
+    Grid.switchToSurface = function switchToSurface(){
         activeSpriteContainer = surfaceSpriteContainer;
         activeTiles = surfaceTiles;
-        
-        var undergroundSpriteContainerStageIndex = stage.getChildIndex(undergroundSpriteContainer);
-        stage.removeChild(undergroundSpriteContainer);
-        stage.addChildAt(surfaceSpriteContainer, undergroundSpriteContainerStageIndex);
+
+        surfaceSpriteContainer.visible = true;
+        undergroundSpriteContainer.visible = false;
     }
     
     Grid.getTiles = function getTiles(){

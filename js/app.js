@@ -33,14 +33,16 @@
         statusBarContainer.x = 940;
         statusBarContainer.y = 10;
 
-        var gridContainer = LD.Grid.initialize(13, 11, 11, 9, 64, 64);
+        var gridContainers = LD.Grid.initialize(13, 11, 11, 9, 64, 64);
 
         LD.addEventListener('keyup_esc', function(event) {
             LD.UI.StatusBar.clearActiveBuilding();
             LD.setActiveTile(null);
         });
 
-        app.stage.addChild(gridContainer);
+        for(var i = 0; i < gridContainers.length; i++){
+            app.stage.addChild(gridContainers[i]);
+        }        
         app.stage.addChild(uiContainer);
         app.stage.addChild(statusBarContainer);
 

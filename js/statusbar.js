@@ -69,6 +69,9 @@
                 barContainer.addChild(upgradeButton);
                 barContainer.addChild(buildingName);
                 barContainer.addChild(buildingLevel);
+
+                barContainer.visible = false;
+
                 return barContainer;
             }
 
@@ -79,11 +82,15 @@
 
                 setBuildingNameDisplay(building.name);
                 setBuildingLevelDisplay(building.level);
+
+                barContainer.visible = true;
             }
 
             StatusBar.clearActiveBuilding = function clearActiveBuilding() {
                 activeBuilding = null;
                 activeBuildingSprite.alpha = 0;
+
+                barContainer.visible = false;
             }
 
             function setBuildingNameDisplay(name) {
