@@ -18,8 +18,17 @@
         var roadButton;
         var pipeButton;
         var powerCableButton;
+        var powerWaterCableButton;
 
         var sideBarTextStyle;
+
+        var tooltipBackground = new PIXI.Graphics();
+        var tooltipTextStyle = new PIXI.TextStyle({
+            fontFamily: 'Courier New',
+            fontSize: 15,
+            fill: ['#FFFFFF']
+        });
+        var initialCostTooltipText = new PIXI.Text('', tooltipTextStyle);
         
         UI.initialize = function initializeUI(width, height) {
             uiContainer = new PIXI.Container();
@@ -54,10 +63,11 @@
             uiContainer.addChild(buildingBackground);
             uiContainer.addChild(buildingsHeader);
 
-            houseButton = createSidebarTile(uiContainer, 18, 300, 'house', 'img/house.png');
             farmButton = createSidebarTile(uiContainer, 98, 300, 'farm', 'img/farmland.png');
-            industryButton = createSidebarTile(uiContainer, 18, 380, 'industry', 'img/industry.png');
+            houseButton = createSidebarTile(uiContainer, 18, 300, 'house', 'img/house.png');
+            
             shopButton = createSidebarTile(uiContainer, 98, 380, 'shop', 'img/shop.png');
+            industryButton = createSidebarTile(uiContainer, 18, 380, 'industry', 'img/industry.png');            
 
             // Transport
             var transportHeader = PIXI.Sprite.fromImage('img/transportHeader.png');
@@ -71,12 +81,26 @@
             uiContainer.addChild(transportBackground);
             uiContainer.addChild(transportHeader);
 
-            roadButton = createSidebarTile(uiContainer, 18, 485, 'road', 'img/road.png');
             pipeButton = createSidebarTile(uiContainer, 98, 485, 'pipe', 'img/pipeline.png');
+            roadButton = createSidebarTile(uiContainer, 18, 485, 'road', 'img/road.png');
+            powerWaterCableButton = createSidebarTile(uiContainer, 98, 565, 'powerwatercable', 'img/powerWaterCable.png');
             powerCableButton = createSidebarTile(uiContainer, 18, 565, 'powercable', 'img/powercable.png');
-            powerCableButton = createSidebarTile(uiContainer, 98, 565, 'powerwatercable', 'img/powerWaterCable.png');
 
             createToggleLayerButton(uiContainer, 'img/toggleLayerButton.png', 8, 645);
+
+            initialCostTooltipText.x = 8;
+            initialCostTooltipText.y = 8;
+            tooltipBackground.addChild(initialCostTooltipText);
+            tooltipBackground.redraw = function(coordinates, tileInitialCost){
+                initialCostTooltipText.text = "$" + tileInitialCost.formatCustom(0, '.', ',');
+
+                if(coordinates){
+                    tooltipBackground.x = coordinates.x;
+                    tooltipBackground.y = coordinates.y;
+                }
+                tooltipBackground.clear();
+                tooltipBackground.drawRect(0, 0, initialCostTooltipText.width + 16, initialCostTooltipText.height + 16);                    
+            }
 
             return uiContainer;
         }
@@ -104,11 +128,35 @@
         function createSidebarTile(container, x, y, id, icon) {
             var tileButton = PIXI.Sprite.fromImage(icon);
             tileButton.interactive = true;
-            tileButton.buttonMode = true;
+            tileButton.buttonMode = true;            
             tileButton.on('pointerup', function() { LD.setActiveTile(id, tileButton.texture); });
-
             tileButton.x = x;
             tileButton.y = y;
+
+            var overTileButton = false;
+            var tileInitialCost = new LD.TileStorage.buildingConstructors[id]().initialCost;                
+            tileButton.on('pointerover', function(args){
+                tileButton.addChild(tooltipBackground);
+                overTileButton = true;                    
+                tooltipBackground.visible = true;
+                
+                var localPosition = tileButton.toLocal({x: args.data.originalEvent.clientX - 80, y: args.data.originalEvent.clientY - 180});    
+                tooltipBackground.redraw(localPosition, tileInitialCost);
+            });
+            tileButton.on('pointermove', function(args){
+                if(!overTileButton){
+                    return;
+                }
+                var localPosition = tileButton.toLocal({x: args.data.originalEvent.clientX - 80, y: args.data.originalEvent.clientY - 180});
+                tooltipBackground.redraw(localPosition, tileInitialCost);
+            });
+            tileButton.on('pointerout', function(args){
+                overTileButton = false;
+                tooltipBackground.visible = false;
+            });
+
+            tooltipBackground.beginFill(0x333333);
+            tooltipBackground.visible = false;
 
             container.addChild(tileButton);
 

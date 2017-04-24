@@ -61,9 +61,7 @@
                     if (activeBuilding) {                        
                         LD.notify('upgradeTileButtonClicked', activeBuilding);
 
-                        upgradeCostTooltipText.text = activeBuilding.getCurrentUpgradeCost();
-                        tooltipBackground.clear();
-                        tooltipBackground.drawRect(0, 0, upgradeCostTooltipText.width + 16, upgradeCostTooltipText.height + 16);
+                        tooltipBackground.redraw();
                         
                         setBuildingLevelDisplay(activeBuilding.level);
                     }
@@ -74,23 +72,15 @@
                     overUpgradeButton = true;                    
                     tooltipBackground.visible = true;
                     
-                    upgradeCostTooltipText.text = activeBuilding.getCurrentUpgradeCost();
-                    var localPosition = upgradeButton.toLocal({x: args.data.originalEvent.clientX - 80, y: args.data.originalEvent.clientY - 180});
-                    tooltipBackground.x = localPosition.x;
-                    tooltipBackground.y = localPosition.y;      
-                    tooltipBackground.clear();
-                    tooltipBackground.drawRect(0, 0, upgradeCostTooltipText.width + 16, upgradeCostTooltipText.height + 16);
+                    var localPosition = upgradeButton.toLocal({x: args.data.originalEvent.clientX - 80, y: args.data.originalEvent.clientY - 180});    
+                    tooltipBackground.redraw(localPosition);
                 });
                 upgradeButton.on('pointermove', function(args){
                     if(!overUpgradeButton){
                         return;
                     }
-                    upgradeCostTooltipText.text = activeBuilding.getCurrentUpgradeCost();
                     var localPosition = upgradeButton.toLocal({x: args.data.originalEvent.clientX - 80, y: args.data.originalEvent.clientY - 180});
-                    tooltipBackground.x = localPosition.x;
-                    tooltipBackground.y = localPosition.y;
-                    tooltipBackground.clear();
-                    tooltipBackground.drawRect(0, 0, upgradeCostTooltipText.width + 16, upgradeCostTooltipText.height + 16);                    
+                    tooltipBackground.redraw(localPosition);
                 });
                 upgradeButton.on('pointerout', function(args){
                     overUpgradeButton = false;
@@ -106,6 +96,16 @@
                 var tooltipBackground = new PIXI.Graphics();
                 tooltipBackground.beginFill(0x333333);
                 tooltipBackground.visible = false;
+                tooltipBackground.redraw = function(coordinates){
+                    upgradeCostTooltipText.text = "$" + activeBuilding.getCurrentUpgradeCost().formatCustom(0, '.', ',');
+
+                    if(coordinates){
+                        tooltipBackground.x = coordinates.x;
+                        tooltipBackground.y = coordinates.y;
+                    }
+                    tooltipBackground.clear();
+                    tooltipBackground.drawRect(0, 0, upgradeCostTooltipText.width + 16, upgradeCostTooltipText.height + 16);                    
+                }
                 upgradeCostTooltipText = new PIXI.Text('', tooltipTextStyle);
                 upgradeCostTooltipText.x = 8;
                 upgradeCostTooltipText.y = 8;
