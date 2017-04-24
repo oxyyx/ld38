@@ -9,7 +9,12 @@
 
     var eventListeners = {};
 
-    var currency = 10000;
+    var loseAmount = -10000;
+    var initialCurrency = 10000;
+
+    var gameOver = false;
+
+    var currency = initialCurrency;
     var technology = 0;
     var food = 0;
     var water = 0;
@@ -19,6 +24,10 @@
 
     var milisecondsCounter = 0;
     const updateEveryMS = 250;
+
+    var overlayBackground;
+    var overlayText;
+    var resetButton;
 
     LD.activeTileConstructor = null;
 
@@ -32,7 +41,6 @@
             volume: 0.8,
             rate: 1.0
         });
-
         gameworkContainer = document.getElementById('canvas-container');
 		gameworkContainer.appendChild(app.view);
         
@@ -55,6 +63,8 @@
         }        
         app.stage.addChild(uiContainer);
         app.stage.addChild(statusBarContainer);
+
+        initializeOverlay(app.stage);
 
         LD.Input.Keyboard.initialize();
 
@@ -97,13 +107,26 @@
         milisecondsCounter -= updateEveryMS;
 
         var tiles = LD.Grid.getTiles();
-        updateCurrency(tiles);
-        updateWater(tiles);
-        updateElectricity(tiles);
-        updateTechnologyPoints(tiles);
-        updateFood(tiles);
-        updateJobs(tiles);
-        updatePopulation(tiles);
+
+        if (!gameOver) {
+            updateCurrency(tiles);
+            updateWater(tiles);
+            updateElectricity(tiles);
+            updateTechnologyPoints(tiles);
+            updateFood(tiles);
+            updateJobs(tiles);
+            updatePopulation(tiles);
+            
+            if (isGameWon(tiles)) {
+                gameOver = true;
+                showGameWonOverlay();
+            }
+        }
+
+        if (currency <= loseAmount) {
+            gameOver = true;
+            showGameLostOverlay();
+        }
     }
 
     LD.addEventListener = function addEventListener(eventName, eventHandler) {
@@ -122,6 +145,78 @@
         for (var i = 0; i < eventListeners[eventName].length; i++) {
             eventListeners[eventName][i](event);
         }
+    }
+
+    LD.resetGame = function resetGame() {
+        gridContainers = LD.Grid.reset();
+
+        setCurrency(initialCurrency);
+        setPeople(0, 0);
+        setTechnology(0);
+        setWater(0);
+        setElectricity(0);
+        setFood(0);
+
+        gameOver = false;
+        setOverlayVisibile(false);
+    }
+
+    function initializeOverlay(stage) {
+        overlayBackground = new PIXI.Graphics();
+        overlayBackground.beginFill(0x000000);
+        overlayBackground.drawRect(0, 290, 1280, 120);
+        overlayBackground.visible = false;
+        overlayBackground.alpha = 0.8;
+
+        overlayText = new PIXI.Text('', { fontFamily: 'Courier New', fontSize: 52, fill: 0xFFFFFF});
+        overlayText.visible = false;
+
+        resetButton = PIXI.Sprite.fromImage('img/resetButton.png');
+        resetButton.buttonMode = true;
+        resetButton.interactive = true;
+        resetButton.on('pointerup', function() { LD.resetGame(); });
+        resetButton.visible = false;
+
+        resetButton.x = Math.floor(1280 / 2 - (resetButton.width / 2));
+        resetButton.y = Math.floor(720 / 2 - (resetButton.height / 2)) + 10;
+
+        stage.addChild(overlayBackground);
+        stage.addChild(overlayText);
+        stage.addChild(resetButton);
+    }
+
+    function isGameWon(tiles) {
+        var maxLevelHouses = tiles.filter(function(value) {
+            return value.id == 'house' && value.level == value.maxLevel;
+        });
+
+        if (maxLevelHouses.length == LD.Grid.getAmountOfPlayableTiles()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    function setOverlayText(text) {
+        overlayText.text = text;
+        overlayText.x = Math.floor(1280 / 2 - (overlayText.width / 2));
+        overlayText.y = Math.floor(720 / 2 - (overlayText.height / 2)) - 40;
+    }
+
+    function showGameLostOverlay() {
+        setOverlayText('You went bankrupt, you lose! :(');
+        setOverlayVisibile(true);
+    }
+
+    function showGameWonOverlay() {
+        setOverlayText('You win! Small worlds for everyone..');
+        setOverlayVisibile(true);
+    }
+
+    function setOverlayVisibile(overlayVisible) {
+        overlayText.visible = overlayVisible;
+        overlayBackground.visible = overlayVisible;
+        resetButton.visible = overlayVisible;
     }
 
     function updateCurrency(tiles){

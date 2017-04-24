@@ -16,6 +16,7 @@ Tile.prototype.baseFoodProduction = 0;
 Tile.prototype.baseJobsProvided = 0;
 Tile.prototype.baseWaterProvided = 0;
 Tile.prototype.baseElectricityProvided = 0;
+Tile.prototype.maxLevel = -1;
 Tile.prototype.getCurrentUpgradeCost = function getCurrentUpgradeCost(){
     return (this.initialCost + (200 * this.level)) + 200;
 }
@@ -59,6 +60,7 @@ function House(){
     this.initialCost = 100;
     this.texture = PIXI.Texture.fromImage('img/house.png');
     this.basePopulationCapacity = 10;
+    this.maxLevel = 5;
 
     switch(getRandomInt(1, 3)) {
         case 1: this.name = 'The Garfields'; break;

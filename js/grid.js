@@ -15,10 +15,14 @@
     var pipelineConnection = null;
     var electricityConnection = null;
     var defaultConnectionTiles = null;
+
+    var amountOfPlayableTiles;
     
     Grid.initialize = function initialize(totalWidth, totalHeight, playableWidth, playableHeight, pTileWidth, pTileHeight){
         gridWidth = totalWidth;
         gridHeight = totalHeight;
+
+        amountOfPlayableTiles = playableWidth * playableHeight;
         
         playableArea.width = playableWidth;
         playableArea.height = playableHeight;
@@ -72,6 +76,10 @@
     
     Grid.getTiles = function getTiles(){
         return surfaceTiles.concat(undergroundTiles);
+    }
+
+    Grid.getAmountOfPlayableTiles = function getAmountOfPlayableTiles() {
+        return amountOfPlayableTiles;
     }
 
     Grid.tryPlaceTile = function tryPlaceTile(tile, x, y){  
