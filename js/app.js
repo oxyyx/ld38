@@ -46,8 +46,18 @@
 
         LD.Input.Keyboard.initialize();
 
-        LD.Grid.onTileSelected = function onTileSelected(building) {
-            LD.UI.StatusBar.setActiveBuilding(building);
+        LD.Grid.onTileClicked = function onTileClicked(building, x, y) {
+            if(LD.activeTileConstructor != null){
+                var tile = new LD.activeTileConstructor();
+                var hasPlacedTile = LD.Grid.tryPlaceTile(tile, x, y);
+
+                if(hasPlacedTile){
+                    setCurrency(currency - tile.initialCost);
+                }
+            }
+            else{    
+                LD.UI.StatusBar.setActiveBuilding(building);
+            }
         };
 
         app.ticker.add(LD.update);
