@@ -10,9 +10,11 @@
     var eventListeners = {};
 
     var loseAmount = -10000;
+    var initialCurrency = 10000;
+
     var gameOver = false;
 
-    var currency = 10000;
+    var currency = initialCurrency;
     var technology = 0;
     var food = 0;
     var water = 0;
@@ -25,6 +27,7 @@
 
     var overlayBackground;
     var overlayText;
+    var resetButton;
 
     LD.activeTileConstructor = null;
 
@@ -61,9 +64,7 @@
         app.stage.addChild(uiContainer);
         app.stage.addChild(statusBarContainer);
 
-        initializeOverlay();
-        app.stage.addChild(overlayBackground);
-        app.stage.addChild(overlayText);
+        initializeOverlay(app.stage);
 
         LD.Input.Keyboard.initialize();
 
@@ -115,6 +116,11 @@
             updateFood(tiles);
             updateJobs(tiles);
             updatePopulation(tiles);
+            
+            if (isGameWon(tiles)) {
+                gameOver = true;
+                showGameWonOverlay();
+            }
         }
 
         if (currency <= loseAmount) {
@@ -141,35 +147,79 @@
         }
     }
 
-    function initializeOverlay() {
+    LD.resetGame = function resetGame() {
+        gridContainers = LD.Grid.reset();
+
+        setCurrency(initialCurrency);
+        setPeople(0, 0);
+        setTechnology(0);
+        setWater(0);
+        setElectricity(0);
+        setFood(0);
+
+        gameOver = false;
+        setOverlayVisibile(false);
+    }
+
+    function initializeOverlay(stage) {
         overlayBackground = new PIXI.Graphics();
         overlayBackground.beginFill(0x000000);
-        overlayBackground.drawRect(0, 310, 1280, 100);
-        overlayBackground.alpha = 0;
+        overlayBackground.drawRect(0, 290, 1280, 120);
+        overlayBackground.visible = false;
+        overlayBackground.alpha = 0.8;
 
         overlayText = new PIXI.Text('', { fontFamily: 'Courier New', fontSize: 52, fill: 0xFFFFFF});
-        overlayText.alpha = 0;
+        overlayText.visible = false;
+
+        resetButton = PIXI.Sprite.fromImage('img/resetButton.png');
+        resetButton.buttonMode = true;
+        resetButton.interactive = true;
+        resetButton.on('pointerup', function() { LD.resetGame(); });
+        resetButton.visible = false;
+
+        resetButton.x = Math.floor(1280 / 2 - (resetButton.width / 2));
+        resetButton.y = Math.floor(720 / 2 - (resetButton.height / 2)) + 10;
+
+        stage.addChild(overlayBackground);
+        stage.addChild(overlayText);
+        stage.addChild(resetButton);
+    }
+
+    function isGameWon(tiles) {
+        var maxLevelHouses = tiles.filter(function(value) {
+            return value.id == 'house' && value.level == value.maxLevel;
+        });
+
+        console.log(maxLevelHouses.length);
+        console.log(LD.Grid.getAmountOfPlayableTiles());
+
+        if (maxLevelHouses.length == LD.Grid.getAmountOfPlayableTiles()) {
+            return true;
+        }
+
+        return false;
     }
 
     function setOverlayText(text) {
         overlayText.text = text;
-        overlayText.x = 1280 / 2 - (overlayText.width / 2);
-        overlayText.y = 720 / 2 - (overlayText.height / 2);
+        overlayText.x = Math.floor(1280 / 2 - (overlayText.width / 2));
+        overlayText.y = Math.floor(720 / 2 - (overlayText.height / 2)) - 40;
     }
 
     function showGameLostOverlay() {
         setOverlayText('You went bankrupt, you lose! :(');
-        showOverlay();
+        setOverlayVisibile(true);
     }
 
     function showGameWonOverlay() {
         setOverlayText('You win! Small worlds for everyone..');
-        showOverlay();
+        setOverlayVisibile(true);
     }
 
-    function showOverlay() {
-        overlayText.alpha = 1;
-        overlayBackground.alpha = 0.8;
+    function setOverlayVisibile(overlayVisible) {
+        overlayText.visible = overlayVisible;
+        overlayBackground.visible = overlayVisible;
+        resetButton.visible = overlayVisible;
     }
 
     function updateCurrency(tiles){
