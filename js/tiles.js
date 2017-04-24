@@ -67,6 +67,22 @@ function House(){
         case 2: this.name = 'The Fredricks'; break;
         case 3: this.name = 'The Ericsons'; break;
     }
+
+    this.getCurrentJobsProvided = function getCurrentJobsProvided(){
+        if(this.level == 5){
+            return this.getCurrentPopulationCapacity();
+        }
+
+        return this.baseJobsProvided * (this.level + 1);
+    }
+
+    this.getCurrentFoodProduced = function getCurrentFoodProduced(){
+        if(this.level == 5){
+            return this.getCurrentPopulationCapacity();
+        }
+
+        return this.baseFoodProduction * (this.level + 1);
+    }
 }
 House.prototype = Tile.prototype;
 
