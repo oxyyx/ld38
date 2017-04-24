@@ -16,6 +16,8 @@
             var upgradeButton;
             var buildingTextStyle;
 
+            var upgradeCostTooltip;
+
             StatusBar.initialize = function initialize(width, height) {
                 barWidth = width;
                 barHeight = height;
@@ -59,9 +61,54 @@
                     if (activeBuilding) {                        
                         LD.notify('upgradeTileButtonClicked', activeBuilding);
 
+                        upgradeCostTooltipText.text = activeBuilding.getCurrentUpgradeCost();
+                        tooltipBackground.clear();
+                        tooltipBackground.drawRect(0, 0, upgradeCostTooltipText.width + 16, upgradeCostTooltipText.height + 16);
+                        
                         setBuildingLevelDisplay(activeBuilding.level);
                     }
                 });
+
+                var overUpgradeButton = false;
+                upgradeButton.on('pointerover', function(args){
+                    overUpgradeButton = true;                    
+                    tooltipBackground.visible = true;
+                    
+                    upgradeCostTooltipText.text = activeBuilding.getCurrentUpgradeCost();
+                    var localPosition = upgradeButton.toLocal({x: args.data.originalEvent.clientX - 80, y: args.data.originalEvent.clientY - 180});
+                    tooltipBackground.x = localPosition.x;
+                    tooltipBackground.y = localPosition.y;      
+                    tooltipBackground.clear();
+                    tooltipBackground.drawRect(0, 0, upgradeCostTooltipText.width + 16, upgradeCostTooltipText.height + 16);
+                });
+                upgradeButton.on('pointermove', function(args){
+                    if(!overUpgradeButton){
+                        return;
+                    }
+                    upgradeCostTooltipText.text = activeBuilding.getCurrentUpgradeCost();
+                    var localPosition = upgradeButton.toLocal({x: args.data.originalEvent.clientX - 80, y: args.data.originalEvent.clientY - 180});
+                    tooltipBackground.x = localPosition.x;
+                    tooltipBackground.y = localPosition.y;
+                    tooltipBackground.clear();
+                    tooltipBackground.drawRect(0, 0, upgradeCostTooltipText.width + 16, upgradeCostTooltipText.height + 16);                    
+                });
+                upgradeButton.on('pointerout', function(args){
+                    overUpgradeButton = false;
+                    tooltipBackground.visible = false;
+                });
+
+                var tooltipTextStyle = new PIXI.TextStyle({
+                    fontFamily: 'Courier New',
+                    fontSize: 15,
+                    fill: ['#FFFFFF']
+                });
+
+                var tooltipBackground = new PIXI.Graphics();
+                tooltipBackground.beginFill(0x333333);
+                tooltipBackground.visible = false;
+                upgradeCostTooltipText = new PIXI.Text('', tooltipTextStyle);
+                upgradeCostTooltipText.x = 8;
+                upgradeCostTooltipText.y = 8;
 
                 barContainer.addChild(background);
                 barContainer.addChild(headerBackground);
@@ -69,6 +116,8 @@
                 barContainer.addChild(upgradeButton);
                 barContainer.addChild(buildingName);
                 barContainer.addChild(buildingLevel);
+                upgradeButton.addChild(tooltipBackground);
+                tooltipBackground.addChild(upgradeCostTooltipText);
 
                 barContainer.visible = false;
 
