@@ -207,8 +207,8 @@
                 }
             }
             else{
-                if(LD.Grid.onTileSelected != null){
-                    LD.Grid.onTileSelected();
+                if(LD.Grid.onTileSelected){
+                    LD.Grid.onTileSelected(activeTiles[getTileIndex(x, y)]);
                 }
             }
         }

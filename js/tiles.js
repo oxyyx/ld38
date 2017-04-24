@@ -1,5 +1,6 @@
 function Tile(){}
 Tile.prototype.id = -1;
+Tile.prototype.name = 'Unnamed';
 Tile.prototype.baseIncome = 0;
 Tile.prototype.initialCost = 0;
 Tile.prototype.maintenanceCost = 0;
@@ -35,6 +36,12 @@ function House(){
     this.initialCost = 100;
     this.texture = PIXI.Texture.fromImage('img/house.png');
     this.populationCapacity = 10;
+
+    switch(getRandomInt(1, 3)) {
+        case 1: this.name = 'The Garfields'; break;
+        case 2: this.name = 'The Fredricks'; break;
+        case 3: this.name = 'The Ericsons'; break;
+    }
 }
 House.prototype = Tile.prototype;
 
@@ -42,6 +49,7 @@ function Industry(){
     this.id = 'industry';
     this.initialCost = 100;
     this.texture = PIXI.Texture.fromImage('img/industry.png');
+    this.name = 'Industry';
 }
 Industry.prototype = Tile.prototype;
 
@@ -49,6 +57,7 @@ function ShopEntertainment(){
     this.id = 'shop';
     this.initialCost = 100;
     this.texture = PIXI.Texture.fromImage('img/shop.png');
+    this.name = 'Shop';
 }
 ShopEntertainment.prototype = Tile.prototype;
 
@@ -56,6 +65,7 @@ function Farm(){
     this.id = 'farm';
     this.initialCost = 100;
     this.texture = PIXI.Texture.fromImage('img/farmland.png');
+    this.name = 'Farm';
 }
 Farm.prototype = Tile.prototype;
 

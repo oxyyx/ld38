@@ -24,7 +24,6 @@
 			};
 
             function keyPressHandler(event) {
-                console.log(event);
                 LD.notify('keypress', event);
             }
 
