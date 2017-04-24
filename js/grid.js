@@ -85,6 +85,25 @@
 
         return canPlace;
     }
+
+    Grid.reset = function reset(){
+        var gridSpriteParent = surfaceSpriteContainer.parent;
+        gridSpriteParent.removeChild(surfaceSpriteContainer);
+        gridSpriteParent.removeChild(undergroundSpriteContainer);
+
+        tileTextures = {};
+        surfaceTiles = [];
+        undergroundTiles = [];
+        activeTiles = surfaceTiles;
+        surfaceSpriteContainer = new PIXI.Container();
+        undergroundSpriteContainer = new PIXI.Container();
+        activeSpriteContainer = surfaceSpriteContainer;
+
+        var spriteContainers = Grid.initialize(gridWidth, gridHeight, playableArea.width, playableArea.height, tileWidth, tileHeight);
+        for(var i = 0; i < spriteContainers.length; i++){
+            gridSpriteParent.addChild(spriteContainers[i]);
+        }
+    }
     
     function intitializeSurfaceTiles(){
         for(var y = 0; y < gridHeight; y++){
@@ -127,6 +146,18 @@
 
         var pipelineConnectionAtHorizontalEdge = Math.round(Math.random()) == 1;
         var pipelineConnectionAtFarEdge = Math.round(Math.random()) == 1;
+
+        function checkPositionAlreadyhasDefaultConnection(tileIndex){
+            for(var i = 0; i < defaultConnectionTiles.length; i++){
+                if(defaultConnectionTiles[i].id == tilesArray[tileIndex].id){
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        checkPositionAlreadyhasDefaultConnection
         
         if(pipelineConnectionAtHorizontalEdge == true){
             var pipelineConnectionX = playableArea.xStart + Math.floor(Math.random() * playableArea.width);
@@ -134,7 +165,7 @@
             if(pipelineConnectionAtFarEdge){
                 for(var i = playableArea.yStart + playableArea.height; i < gridHeight; i++){
                     var tileIndex = getTileIndex(pipelineConnectionX, i);
-                    if(defaultConnectionTiles.contains(spriteContainer.children[tileIndex].texture)){
+                    if(checkPositionAlreadyhasDefaultConnection(tileIndex)){
                         return false;
                     }
                     
@@ -145,7 +176,7 @@
             else{
                 for(var i = 0; i < playableArea.yStart; i++){
                     var tileIndex = getTileIndex(pipelineConnectionX, i);
-                    if(defaultConnectionTiles.contains(spriteContainer.children[tileIndex].texture)){
+                    if(checkPositionAlreadyhasDefaultConnection(tileIndex)){
                         return false;
                     }
                     
@@ -160,7 +191,7 @@
             if(pipelineConnectionAtFarEdge){
                 for(var i = playableArea.xStart + playableArea.width; i < gridWidth; i++){
                     var tileIndex = getTileIndex(i, pipelineConnectionY);
-                    if(defaultConnectionTiles.contains(spriteContainer.children[tileIndex].texture)){
+                    if(checkPositionAlreadyhasDefaultConnection(tileIndex)){
                         return false;
                     }
                     
@@ -171,7 +202,7 @@
             else{
                 for(var i = 0; i < playableArea.xStart; i++){
                     var tileIndex = getTileIndex(i, pipelineConnectionY);
-                    if(defaultConnectionTiles.contains(spriteContainer.children[tileIndex].texture)){
+                    if(checkPositionAlreadyhasDefaultConnection(tileIndex)){
                         return false;
                     }
                     
