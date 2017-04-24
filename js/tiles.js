@@ -11,6 +11,10 @@ Tile.prototype.hasElectricity = false;
 Tile.prototype.hasRoad = false;
 Tile.prototype.isDefaultTile = false;
 Tile.prototype.populationCapacity = 0;
+Tile.prototype.foodProduction = 0;
+Tile.prototype.jobsProvided = 0;
+Tile.prototype.waterProvided = 0;
+Tile.prototype.electricityProvided = 0;
 Tile.prototype.getCurrentUpgradeCost = function getCurrentUpgradeCost(){
     return (this.initialCost + (200 * this.level)) + 200;
 }
@@ -41,6 +45,7 @@ House.prototype = Tile.prototype;
 function Industry(){
     this.id = 'industry';
     this.initialCost = 100;
+    this.jobsProvided = 10;
     this.texture = PIXI.Texture.fromImage('img/industry.png');
 }
 Industry.prototype = Tile.prototype;
@@ -48,6 +53,7 @@ Industry.prototype = Tile.prototype;
 function ShopEntertainment(){
     this.id = 'shop';
     this.initialCost = 100;
+    this.jobsProvided = 5;
     this.texture = PIXI.Texture.fromImage('img/shop.png');
 }
 ShopEntertainment.prototype = Tile.prototype;
@@ -55,6 +61,7 @@ ShopEntertainment.prototype = Tile.prototype;
 function Farm(){
     this.id = 'farm';
     this.initialCost = 100;
+    this.foodProduction = 10;
     this.texture = PIXI.Texture.fromImage('img/farmland.png');
 }
 Farm.prototype = Tile.prototype;
@@ -72,6 +79,7 @@ function Pipeline(){
     this.initialCost = 100;
     this.maintenanceCost = 20 ;
     this.isUnderground = true;
+    this.waterProvided = 10;
     this.texture = PIXI.Texture.fromImage('img/pipeline.png');
 }
 Pipeline.prototype = Tile.prototype;
@@ -81,6 +89,7 @@ function Powerline(){
     this.initialCost = 100;
     this.maintenanceCost = 20;
     this.isUnderground = true;
+    this.electricityProvided = 10;
     this.texture = PIXI.Texture.fromImage('img/powercable.png');
 }
 Powerline.prototype = Tile.prototype;

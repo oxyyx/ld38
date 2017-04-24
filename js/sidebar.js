@@ -152,8 +152,8 @@
             workText.text = value.formatCustom(0, '.', ',');
         }
 
-        UI.setPeople = function setPeople(value) {
-            peopleText.text = value.formatCustom(0, '.', ',');
+        UI.setPeople = function setPeople(current, total) {
+            peopleText.text = current.formatCustom(0, '.', ',') + " / " + total.formatCustom(0, '.', ',');
         }
     }(window.LD.UI = window.LD.UI || {}));
 }(window.LD = window.LD || {}));

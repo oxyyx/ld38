@@ -12,20 +12,14 @@
     var food = 0;
     var water = 0;
     var electricity = 0;
+    var populationCapacity = 0;
+    var currentPopulation = 0;
 
-    Array.prototype.contains = function(obj) {
-        var i = this.length;
-        while (i--) {
-            if (this[i] === obj) {
-                return true;
-            }
-        }
-        return false;
-    }
+    var milisecondsCounter = 0;
+    const updateEveryMS = 250;
 
     LD.initialize = function initialize() {
         app = new PIXI.Application(1280, 720, {backgroundColor : 0x9FD4E3});
-
 
         gameworkContainer = document.getElementById('canvas-container');
 		gameworkContainer.appendChild(app.view);
@@ -63,9 +57,6 @@
         LD.UI.StatusBar.clearActiveBuilding();
     }
 
-    var totalCurrency = 0;
-    var milisecondsCounter = 0;
-    const updateEveryMS = 250;
     LD.update = function update(delta) {
         milisecondsCounter += app.ticker.elapsedMS;
         if(milisecondsCounter < updateEveryMS){
@@ -74,22 +65,13 @@
         milisecondsCounter -= updateEveryMS;
 
         var tiles = LD.Grid.getTiles();
-        var incomeSum = 0;
-        for(var i = 0; i < tiles.length; i++){
-            incomeSum += tiles[i].getCurrentIncome();
-            incomeSum -= tiles[i].getCurrentCost();
-        }
-        totalCurrency += incomeSum;
-
-        setCurrency(totalCurrency);
-
-        var populationCapacity = tiles.reduce(
-            function(acc, val){
-                return acc + val.populationCapacity;
-            },
-         0);
-
-        setPeople(populationCapacity);
+        updateCurrency(tiles);
+        updateWater(tiles);
+        updateElectricity(tiles);
+        updateTechnologyPoints(tiles);
+        updateFood(tiles);
+        updateJobs(tiles);
+        updatePopulation(tiles);
     }
 
     LD.addEventListener = function addEventListener(eventName, eventHandler) {
@@ -108,6 +90,101 @@
         for (var i = 0; i < eventListeners[eventName].length; i++) {
             eventListeners[eventName][i](event);
         }
+    }
+
+    function updateCurrency(tiles){
+        var incomeSum = tiles.reduce(
+            function(acc, val){
+                return acc + val.getCurrentIncome() - val.getCurrentCost();
+            },
+        0);
+
+        currency += incomeSum;
+
+        setCurrency(currency);
+    }
+
+    function updateWater(tiles){
+        var water = tiles.reduce(
+            function(acc, val){
+                if(val.isDefaultTile){
+                    return acc;
+                }
+
+                return acc + val.waterProvided;
+            },
+        0);
+
+        setWater(water);
+    }
+
+    function updateElectricity(tiles){
+        var electricity = tiles.reduce(
+            function(acc, val){
+                if(val.isDefaultTile){
+                    return acc;
+                }
+
+                return acc + val.electricityProvided;
+            },
+        0);
+
+        setElectricity(electricity);
+    }
+
+    function updatePopulation(tiles){
+        var populationCapacity = tiles.reduce(
+            function(acc, val){
+                return acc + val.populationCapacity;
+            },
+         0);
+
+         var populationChange = 0;
+         if(food > currentPopulation && water > currentPopulation && electricity > currentPopulation && work > currentPopulation && currentPopulation < populationCapacity){
+            populationChange = 1;
+         }
+         else if(food < currentPopulation || water < currentPopulation || electricity < currentPopulation || work < currentPopulation){
+             populationChange = -1;
+         }
+
+         if(currentPopulation > populationCapacity){
+             populationChange = populationCapacity - currentPopulation;
+         }
+
+        setPeople(currentPopulation + populationChange, populationCapacity);
+    }
+
+    function updateTechnologyPoints(tiles){
+        var technologyPoints = tiles.reduce(
+            function(acc, val){
+                if(val.id == 'house'){
+                    return acc;
+                }
+                return acc + val.level;
+            },
+        0);
+
+        setTechnology(technologyPoints);
+    }
+
+    function updateFood(tiles){
+        var foodProduction = tiles.reduce(
+            function(acc, val){
+                return acc + val.foodProduction;
+            },
+        0);
+
+        setFood(foodProduction);
+    }
+
+    function updateJobs(tiles){
+        var jobs = tiles.reduce(
+            function(acc, val){
+                return acc + val.jobsProvided;
+            },
+        0);
+
+        setWork(jobs);
     }
 
     function setCurrency(value) {
@@ -140,9 +217,10 @@
         LD.UI.setWork(value);
     }
 
-    function setPeople(value) {
-        people = value;
-        LD.UI.setPeople(value);
+    function setPeople(current, totalCapacity) {
+        currentPopulation = current
+        populationCapacity = totalCapacity;
+        LD.UI.setPeople(current, totalCapacity);
     }
 
     function toggleLayerButtonClicked(){
