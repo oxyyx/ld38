@@ -9,6 +9,9 @@
 
     var eventListeners = {};
 
+    var loseAmount = -10000;
+    var gameOver = false;
+
     var currency = 10000;
     var technology = 0;
     var food = 0;
@@ -19,6 +22,9 @@
 
     var milisecondsCounter = 0;
     const updateEveryMS = 250;
+
+    var overlayBackground;
+    var overlayText;
 
     LD.activeTileConstructor = null;
 
@@ -32,7 +38,6 @@
             volume: 0.8,
             rate: 1.0
         });
-
         gameworkContainer = document.getElementById('canvas-container');
 		gameworkContainer.appendChild(app.view);
         
@@ -55,6 +60,10 @@
         }        
         app.stage.addChild(uiContainer);
         app.stage.addChild(statusBarContainer);
+
+        initializeOverlay();
+        app.stage.addChild(overlayBackground);
+        app.stage.addChild(overlayText);
 
         LD.Input.Keyboard.initialize();
 
@@ -97,13 +106,21 @@
         milisecondsCounter -= updateEveryMS;
 
         var tiles = LD.Grid.getTiles();
-        updateCurrency(tiles);
-        updateWater(tiles);
-        updateElectricity(tiles);
-        updateTechnologyPoints(tiles);
-        updateFood(tiles);
-        updateJobs(tiles);
-        updatePopulation(tiles);
+
+        if (!gameOver) {
+            updateCurrency(tiles);
+            updateWater(tiles);
+            updateElectricity(tiles);
+            updateTechnologyPoints(tiles);
+            updateFood(tiles);
+            updateJobs(tiles);
+            updatePopulation(tiles);
+        }
+
+        if (currency <= loseAmount) {
+            gameOver = true;
+            showGameLostOverlay();
+        }
     }
 
     LD.addEventListener = function addEventListener(eventName, eventHandler) {
@@ -122,6 +139,37 @@
         for (var i = 0; i < eventListeners[eventName].length; i++) {
             eventListeners[eventName][i](event);
         }
+    }
+
+    function initializeOverlay() {
+        overlayBackground = new PIXI.Graphics();
+        overlayBackground.beginFill(0x000000);
+        overlayBackground.drawRect(0, 310, 1280, 100);
+        overlayBackground.alpha = 0;
+
+        overlayText = new PIXI.Text('', { fontFamily: 'Courier New', fontSize: 52, fill: 0xFFFFFF});
+        overlayText.alpha = 0;
+    }
+
+    function setOverlayText(text) {
+        overlayText.text = text;
+        overlayText.x = 1280 / 2 - (overlayText.width / 2);
+        overlayText.y = 720 / 2 - (overlayText.height / 2);
+    }
+
+    function showGameLostOverlay() {
+        setOverlayText('You went bankrupt, you lose! :(');
+        showOverlay();
+    }
+
+    function showGameWonOverlay() {
+        setOverlayText('You win! Small worlds for everyone..');
+        showOverlay();
+    }
+
+    function showOverlay() {
+        overlayText.alpha = 1;
+        overlayBackground.alpha = 0.8;
     }
 
     function updateCurrency(tiles){
