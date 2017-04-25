@@ -138,6 +138,13 @@
                 setBuildingLevelDisplay(building.level);
 
                 barContainer.visible = true;
+
+                if(building.maxLevel == -1 || (building.maxLevel > -1 && building.level == building.maxLevel)){
+                    upgradeButton.visible = false;
+                }
+                else{
+                    upgradeButton.visible = true;
+                }
             }
 
             StatusBar.clearActiveBuilding = function clearActiveBuilding() {
@@ -145,6 +152,10 @@
                 activeBuildingSprite.alpha = 0;
 
                 barContainer.visible = false;
+            }
+
+            StatusBar.hideUpgradeButton = function hideUpgradeButton(){
+                upgradeButton.visible = false;
             }
 
             function setBuildingNameDisplay(name) {

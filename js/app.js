@@ -17,6 +17,7 @@
     var currency = initialCurrency;
     var technology = 0;
     var food = 0;
+    var work = 0;
     var water = 0;
     var electricity = 0;
     var populationCapacity = 0;
@@ -82,9 +83,13 @@
             }
         });
 
-        LD.addEventListener('upgradeTileButtonClicked', function(buildingToUpgrade){
+        LD.addEventListener('upgradeTileButtonClicked', function(buildingToUpgrade){            
             buildingToUpgrade.level++;
             setCurrency(currency - buildingToUpgrade.getCurrentUpgradeCost());
+
+            if(buildingToUpgrade.level == buildingToUpgrade.maxLevel){
+                LD.UI.StatusBar.hideUpgradeButton();
+            }
         });
 
         LD.addEventListener('toggleLayerButtonClicked', toggleLayerButtonClicked());
@@ -270,21 +275,32 @@
             function(acc, val){
                 return acc + val.getCurrentPopulationCapacity();
             },
-         0);
+         0);         
 
-         var populationChange = 0;
          if(food > currentPopulation && water > currentPopulation && electricity > currentPopulation && work > currentPopulation && currentPopulation < populationCapacity){
-            populationChange = 1;
+            var notFullHouses = tiles.filter(function(value) {
+                return value.id == 'house' && value.currentPopulation < value.getCurrentPopulationCapacity();
+            });
+
+            if(notFullHouses.length > 0){
+                notFullHouses[0].currentPopulation++;
+            }
          }
          else if(food < currentPopulation || water < currentPopulation || electricity < currentPopulation || work < currentPopulation){
-             populationChange = -1;
-         }
+             var housesWithResidents = tiles.filter(function(value) {
+                 return value.id == 'house' && value.currentPopulation > 0;
+             });
 
-         if(currentPopulation > populationCapacity){
-             populationChange = populationCapacity - currentPopulation;
+             if(housesWithResidents.length > 0){
+                 housesWithResidents[0].currentPopulation--;
+             }
          }
-
-        setPeople(currentPopulation + populationChange, populationCapacity);
+         currentPopulation = tiles.reduce(
+             function(acc, val){
+                 return acc + val.currentPopulation;
+            }
+         , 0);
+         setPeople(currentPopulation, populationCapacity);
     }
 
     function updateTechnologyPoints(tiles){

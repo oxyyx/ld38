@@ -1,7 +1,7 @@
 function Tile(){}
 Tile.prototype.id = -1;
 Tile.prototype.name = 'Unnamed';
-Tile.prototype.baseIncome = 0;
+Tile.prototype.baseIncomePerResident = 0;
 Tile.prototype.initialCost = 0;
 Tile.prototype.maintenanceCost = 0;
 Tile.prototype.level = 0;
@@ -12,6 +12,7 @@ Tile.prototype.hasElectricity = false;
 Tile.prototype.hasRoad = false;
 Tile.prototype.isDefaultTile = false;
 Tile.prototype.basePopulationCapacity = 0;
+Tile.prototype.currentPopulation = 0;
 Tile.prototype.baseFoodProduction = 0;
 Tile.prototype.baseJobsProvided = 0;
 Tile.prototype.baseWaterProvided = 0;
@@ -25,7 +26,7 @@ Tile.prototype.getCurrentIncome = function getCurrentIncome(){
         return 0;
     }
 
-    return (this.level * 35) / (this.level + 2.5) + this.baseIncome;
+    return (this.level * 35) / (this.level + 2.5) + (this.currentPopulation * this.baseIncomePerResident);
 }
 Tile.prototype.getCurrentCost = function getCurrentCost(){
     if(this.isDefaultTile){
@@ -56,7 +57,7 @@ Tile.prototype.getCurrentPopulationCapacity = function getCurrentPopulationCapac
 
 function House(){
     this.id = 'house';
-    this.baseIncome = 5;
+    this.baseIncomePerResident = 1;
     this.initialCost = 100;
     this.texture = PIXI.Texture.fromImage('img/house.png');
     this.basePopulationCapacity = 10;
@@ -116,7 +117,7 @@ Farm.prototype = Tile.prototype;
 function Road(){
     this.id = 'road';
     this.initialCost = 100;
-    this.maintenanceCost = 20;
+    this.maintenanceCost = 2;
     this.texture = PIXI.Texture.fromImage('img/road.png');
 }
 Road.prototype = Tile.prototype;
@@ -124,7 +125,7 @@ Road.prototype = Tile.prototype;
 function Pipeline(){
     this.id = 'pipe';
     this.initialCost = 100;
-    this.maintenanceCost = 20 ;
+    this.maintenanceCost = 2;
     this.isUnderground = true;
     this.baseWaterProvided = 10;
     this.texture = PIXI.Texture.fromImage('img/pipeline.png');
@@ -134,7 +135,7 @@ Pipeline.prototype = Tile.prototype;
 function Powerline(){
     this.id = 'powercable';
     this.initialCost = 100;
-    this.maintenanceCost = 20;
+    this.maintenanceCost = 2;
     this.isUnderground = true;
     this.baseElectricityProvided = 10;
     this.texture = PIXI.Texture.fromImage('img/powercable.png');
@@ -144,10 +145,11 @@ Powerline.prototype = Tile.prototype;
 function PowerWaterline(){
     this.id = 'powerwatercable';
     this.initialCost = 300;
-    this.maintenanceCost = 40;
+    this.maintenanceCost = 4;
     this.isUnderground = true;
     this.baseElectricityProvided = 10;
     this.baseWaterProvided = 10;
+    this.maxLevel = 5;
     this.texture = PIXI.Texture.fromImage('img/powerWaterCable.png');
 }
 PowerWaterline.prototype = Tile.prototype;
